@@ -1,14 +1,15 @@
 {
-  "name": "gl-viewer",
-  "builtin-baseline": "ea1a7396b05637a53bf23c078647ecc0edee4b80",
-  "dependencies": [
-    {
-      "name": "glfw3",
-      "version>=": "3.5.1"
-    },
-    {
-      "name": "glew",
-      "version>=": "2.3.1"
-    }
-  ]
+  "name" : "gl-viewer",
+  "version": "0.1.0",
+  "builtin-baseline" : "ea1a7396b05637a53bf23c078647ecc0edee4b80",
+  "dependencies" : [ {
+    "name" : "glfw3",
+    "version>=" : "3.5.1"
+  }, {
+    "name" : "glew",
+    "version>=" : "2.3.1"
+  }, {
+    "name" : "assimp",
+    "version>=" : "6.0.4#3"
+  } ]
 }
