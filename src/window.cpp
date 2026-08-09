@@ -14,8 +14,8 @@ Window::Window(const int width, const int height, const std::string_view title)
         throw std::runtime_error("Failed to initialize GLFW");
     }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
@@ -29,13 +29,14 @@ Window::Window(const int width, const int height, const std::string_view title)
     }
 
     glfwMakeContextCurrent(m_Window);
+    glewExperimental = GL_TRUE;
 
-    if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+    if (glewInit() != GLEW_OK)
     {
         glfwDestroyWindow(m_Window);
         glfwTerminate();
 
-        throw std::runtime_error("Failed to initialize GLAD");
+        throw std::runtime_error("Failed to initialize GLEW");
     }
 
     int flags;

@@ -1,15 +1,17 @@
-#include <glad/glad.h>
+#pragma once
+
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>
 
-void APIENTRY glDebugOutput(GLenum source, 
-                            GLenum type, 
-                            unsigned int id, 
-                            GLenum severity, 
-                            GLsizei length, 
-                            const char* message, 
-                            const void* userParam)
+inline void APIENTRY glDebugOutput(GLenum source,
+                                   GLenum type,
+                                   unsigned int id,
+                                   GLenum severity,
+                                   GLsizei length,
+                                   const char* message,
+                                   const void* userParam)
 {
     if (id == 131185 || id == 131218) return; 
 

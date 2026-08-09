@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 4.3)
+cmake_minimum_required(VERSION 3.10)
 
 project(gl_viewer LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(glfw3 CONFIG REQUIRED)
-find_package(glad CONFIG REQUIRED)
+find_package(GLEW CONFIG REQUIRED)
 
 add_executable(gl_viewer
         src/main.cpp
@@ -14,5 +14,5 @@ add_executable(gl_viewer
 
 target_link_libraries(gl_viewer PRIVATE
         glfw
-        glad::glad
+        GLEW::GLEW
 )
