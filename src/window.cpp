@@ -74,11 +74,17 @@ void Window::Update() const
 
     /* Render here */
     glClear(GL_COLOR_BUFFER_BIT);
+}
 
-    /* Swap front and back buffers */
+/* Swap front and back buffers */
+void Window::SwapBuffers() const
+{
     glfwSwapBuffers(m_Window);
+}
 
-    /* Poll for and process events */
+/* Poll for and process events */
+void Window::ProcessEvents() const
+{
     glfwPollEvents();
 }
 

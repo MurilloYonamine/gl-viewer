@@ -1,0 +1,65 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "debug",
+      "generator": "Visual Studio 17 2022",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "binaryDir": "${sourceDir}/out/build/debug",
+      "hidden": false
+    },
+    {
+      "name": "release",
+      "generator": "Visual Studio 17 2022",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
+      "binaryDir": "${sourceDir}/out/build/release",
+      "hidden": false
+    },
+    {
+      "name": "debug-ninja",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "binaryDir": "${sourceDir}/out/build/debug-ninja",
+      "hidden": false
+    },
+    {
+      "name": "release-ninja",
+      "generator": "Ninja",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      },
+      "binaryDir": "${sourceDir}/out/build/release-ninja",
+      "hidden": false
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "debug",
+      "configurePreset": "debug",
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "release",
+      "configurePreset": "release",
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "debug-ninja",
+      "configurePreset": "debug-ninja",
+      "inheritConfigureEnvironment": true
+    },
+    {
+      "name": "release-ninja",
+      "configurePreset": "release-ninja",
+      "inheritConfigureEnvironment": true
+    }
+  ]
+}

@@ -1,14 +1,10 @@
-#include "window.h"
+#include "simulation.h"
 
 int main()
 {
-    const Window window(800, 600, "GL Viewer");
+    Simulation simulation = Simulation();
 
-    /* Loop until the user closes the window */
-    while (window.IsOpen())
-    {
-        window.Update();
-    }
+    simulation.Update();
 
     return 0;
 }

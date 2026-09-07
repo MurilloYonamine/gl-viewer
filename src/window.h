@@ -14,6 +14,8 @@ public:
     Window(int width = 800, int height = 600, std::string_view title = "OpenGL Window");
     ~Window();
     void Update() const;
+    void SwapBuffers() const;
+    void ProcessEvents() const;
     bool IsOpen() const;
 
 private:
