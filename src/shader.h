@@ -6,6 +6,7 @@
 class Shader {
     public:
         Shader(const std::string& filepath);
+        ~Shader();
         void Bind();
         void Unbind();
 

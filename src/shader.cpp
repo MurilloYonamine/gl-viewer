@@ -34,6 +34,11 @@ Shader::Shader(const std::string &filepath)
     glDeleteShader(fragmentShader);
 }
 
+Shader::~Shader()
+{
+    glDeleteProgram(m_RendererID);
+}
+
 void Shader::Bind()
 {
     glUseProgram(m_RendererID);
