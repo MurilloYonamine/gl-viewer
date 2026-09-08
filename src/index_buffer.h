@@ -13,4 +13,4 @@ class IndexBuffer {
     private:
         GLuint m_RendererID;
         unsigned int m_Count;
-}
+};
