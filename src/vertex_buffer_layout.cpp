@@ -4,7 +4,7 @@ VertexBufferLayout::VertexBufferLayout() : m_Stride(0)
 {
 }
 
-unsigned int VertexBufferLayout::GetStride()
+unsigned int VertexBufferLayout::GetStride() const
 {
     return m_Stride;
 }
@@ -16,7 +16,7 @@ void VertexBufferLayout::PushFloat(unsigned int count)
     m_Stride += count * sizeof(float);
 }
 
-std::vector<VertexBufferLayout::VertexBufferElement> &VertexBufferLayout::GetElements()
+const std::vector<VertexBufferLayout::VertexBufferElement> &VertexBufferLayout::GetElements() const
 {
     return m_Elements;
 }

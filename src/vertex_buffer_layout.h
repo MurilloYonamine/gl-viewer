@@ -12,11 +12,11 @@ class VertexBufferLayout {
 
     public:
         VertexBufferLayout();
-        unsigned int GetStride();
+        unsigned int GetStride() const;
 
         void PushFloat(unsigned int count);
 
-        std::vector<VertexBufferElement>& GetElements();
+        const std::vector<VertexBufferElement>& GetElements() const;
 
     private:
         std::vector<VertexBufferElement> m_Elements;
