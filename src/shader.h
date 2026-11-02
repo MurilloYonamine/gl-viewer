@@ -9,6 +9,7 @@ class Shader {
         ~Shader();
         void Bind();
         void Unbind();
+        GLuint GetID() const { return m_RendererID; }
 
     private:
         GLuint m_RendererID;
