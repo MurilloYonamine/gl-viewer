@@ -27,7 +27,7 @@ void VertexArray::AddBuffer(const VertexBuffer &vbo, const VertexBufferLayout &l
     unsigned int count, type, normalized;
 
     unsigned int index = 0;
-    unsigned int offset = 0;
+    std::size_t offset = 0;
 
     Bind();
     vbo.Bind();
@@ -37,10 +37,10 @@ void VertexArray::AddBuffer(const VertexBuffer &vbo, const VertexBufferLayout &l
         normalized = element.normalized;
         type = element.type;
         
-        glVertexAttribPointer(index, count, type, normalized, stride, (void*)(offset * sizeof(float)));
+        glVertexAttribPointer(index, count, type, normalized, stride, reinterpret_cast<const void*>(offset));
         glEnableVertexAttribArray(index);
         
-        offset += count;
+        offset += count * sizeof(float);
         index++;
     }
 }
