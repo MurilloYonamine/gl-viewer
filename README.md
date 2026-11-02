@@ -13,7 +13,7 @@
 
 <div align="center">
 
-<img src="Media/demo.gif" width="300">
+<img src="media/demo.gif" width="300">
 
 </div>
 
