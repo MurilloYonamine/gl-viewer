@@ -17,6 +17,7 @@ class Window
         void SwapBuffers() const;
         void ProcessEvents() const;
         bool IsOpen() const;
+        GLFWwindow* GetNativeWindow() const { return m_Window; }
 
     private:
         GLFWwindow* m_Window;
