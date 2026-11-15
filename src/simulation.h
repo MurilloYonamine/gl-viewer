@@ -1,8 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include "window.h"
+#include "camera.h"
+
 #include "vertex_buffer.h"
 #include "vertex_array.h"
 #include "index_buffer.h"
@@ -15,6 +15,8 @@ class Simulation {
 
     private:
         Window m_Window;
+        Camera m_Camera;
+
         VertexBuffer m_Vbo;
         VertexArray m_Vao;
         IndexBuffer m_Ibo;

@@ -1,17 +1,15 @@
 #include "simulation.h"
 #include "shader.h"
 
-#include <vector>
-#include <iostream>
 #include <iterator>
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
-#include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <imgui.h>
 
 namespace
 {
@@ -90,20 +88,19 @@ Simulation::~Simulation()
 void Simulation::Update()
 {
     Shader shader("res/shaders/basic.shader");
-    GLint shaderModel = glGetUniformLocation(shader.GetID(), "u_Model");
-    GLint shaderView = glGetUniformLocation(shader.GetID(), "u_View");
-    GLint shaderProjection = glGetUniformLocation(shader.GetID(), "u_Projection");
+    const GLint shaderModel = glGetUniformLocation(shader.GetID(), "u_Model");
+    const GLint shaderView = glGetUniformLocation(shader.GetID(), "u_View");
+    const GLint shaderProjection = glGetUniformLocation(shader.GetID(), "u_Projection");
 
-    float fov = 100.0f;
+    float lastFrame = static_cast<float>(glfwGetTime());
+    float deltaTime = 0.0f;
+    float rotationAngle = 0.0f;
 
-    glm::mat4 view = glm::lookAt(
-        glm::vec3(0.0f, 0.0f, 3.0f), // camera position
-        glm::vec3(0.0f, 0.0f, 0.0f), // point to be observed
-        glm::vec3(0.0f, 1.0f, 0.0f)  // direction up
-    );
+    glm::mat4 view = m_Camera.GetView();
 
+    float fov = m_Camera.GetFov();
     float aspect = 800.0f / 600.0f;
-    float rotation = 0;
+    float rotation = 1.0f;
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -118,15 +115,25 @@ void Simulation::Update()
         ImGui::NewFrame();
 
         ImGui::Begin("GL Viewer");
-        ImGui::SliderFloat("Field of View", &fov, 20.0f, 100.0f);
-        ImGui::SliderFloat("Rotation", &rotation, 0.0f, 25.0f);
+        if (ImGui::SliderFloat("FOV", &fov, 20.0f, 100.0f, "%.1f"))
+        {
+            m_Camera.SetFov(fov);
+        }
+
+        ImGui::SliderFloat("Rotation Speed", &rotation, 0.0f, 3.0f, "%.1f");
+
         ImGui::End();
 
         // Transformation
-        float time = static_cast<float>(glfwGetTime());
+        float currentFrame = static_cast<float>(glfwGetTime());
+        deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        rotationAngle += rotation * deltaTime;
+
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, rotation * time, glm::vec3(sin(time), time, 0.0f));
-        glm::mat4 projection = glm::perspective(glm::radians(fov), aspect, 0.1f, 100.0f);
+        model = glm::rotate(model, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 projection = m_Camera.GetProjection(aspect);
 
         // Scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
