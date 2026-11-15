@@ -114,15 +114,7 @@ void Simulation::Update()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::Begin("GL Viewer");
-        if (ImGui::SliderFloat("FOV", &fov, 20.0f, 100.0f, "%.1f"))
-        {
-            m_Camera.SetFov(fov);
-        }
-
-        ImGui::SliderFloat("Rotation Speed", &rotation, 0.0f, 3.0f, "%.1f");
-
-        ImGui::End();
+        m_Editor.OnGUI(m_Camera);
 
         // Transformation
         float currentFrame = static_cast<float>(glfwGetTime());

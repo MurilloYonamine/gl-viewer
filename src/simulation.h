@@ -1,6 +1,7 @@
 #pragma once
 
 #include "window.h"
+#include "editor.h"
 #include "camera.h"
 
 #include "vertex_buffer.h"
@@ -15,6 +16,7 @@ class Simulation {
 
     private:
         Window m_Window;
+        Editor m_Editor;
         Camera m_Camera;
 
         VertexBuffer m_Vbo;
