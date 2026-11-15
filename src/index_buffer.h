@@ -9,7 +9,7 @@ class IndexBuffer {
         void Bind();
         void Unbind();
 
-        unsigned int GetCount();
+        unsigned int GetCount() const { return m_Count; }
 
     private:
         GLuint m_RendererID;
