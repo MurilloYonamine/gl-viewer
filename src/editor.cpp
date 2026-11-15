@@ -12,6 +12,12 @@ void Editor::OnGUI(Camera &camera)
         {
             camera.SetFov(fov);
         }
+
+        float yaw = glm::degrees(camera.GetYaw());
+        if (ImGui::SliderFloat("Yaw", &yaw, 0.0f, 360.0f, "%.0f"))
+        {
+            camera.SetYaw(glm::radians(yaw));
+        }
     }
 
     ImGui::End();

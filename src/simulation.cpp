@@ -96,9 +96,6 @@ void Simulation::Update()
     float deltaTime = 0.0f;
     float rotationAngle = 0.0f;
 
-    glm::mat4 view = m_Camera.GetView();
-
-    float fov = m_Camera.GetFov();
     float aspect = 800.0f / 600.0f;
     float rotation = 1.0f;
 
@@ -124,7 +121,7 @@ void Simulation::Update()
         rotationAngle += rotation * deltaTime;
 
         glm::mat4 model = glm::mat4(1.0f);
-        model = glm::rotate(model, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::mat4 view = m_Camera.GetView();
         glm::mat4 projection = m_Camera.GetProjection(aspect);
 
         // Scene
