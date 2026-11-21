@@ -1,8 +1,11 @@
 #include "vertex_buffer_layout.h"
+#include <GL/glew.h>
 
-void VertexBufferLayout::PushFloat(unsigned int count)
+VertexBufferLayout::VertexBufferLayout(size_t stride) : m_Stride(stride)
 {
-    m_Elements.push_back({GL_FLOAT, count, GL_FALSE});
+}
 
-    m_Stride += count * sizeof(float);
+void VertexBufferLayout::PushFloat(unsigned int count, size_t offset)
+{
+    m_Elements.push_back({GL_FLOAT, count, GL_FALSE, offset});
 }

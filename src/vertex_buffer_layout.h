@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "gl/glew.h"
 
 class VertexBufferLayout {
     struct VertexBufferElement
@@ -8,13 +7,14 @@ class VertexBufferLayout {
         unsigned int type;
         unsigned int count;
         unsigned char normalized;
+        size_t offset;
     };
 
     public:
-        VertexBufferLayout() = default;
+        VertexBufferLayout(size_t stride);
         unsigned int GetStride() const { return m_Stride; }
 
-        void PushFloat(unsigned int count);
+        void PushFloat(unsigned int count, size_t offset);
 
         const std::vector<VertexBufferElement>& GetElements() const { return m_Elements; }
 
