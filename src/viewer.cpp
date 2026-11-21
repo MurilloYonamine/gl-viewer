@@ -50,7 +50,6 @@ void Viewer::Update()
     glm::vec3 lightDirection{0.5f, 1.0f, 1.0f};
     float ambientStrength = 0.2f;
     float specularStrength = 0.2f;
-    const glm::vec3 cameraPos = m_Camera.GetPosition();
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -64,17 +63,19 @@ void Viewer::Update()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        
         m_Editor.OnGUI(m_Camera, lightDirection, ambientStrength, specularStrength);
-
+        
         // Transformation
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-
+        
         rotationAngle += rotation * deltaTime;
-
+        
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 view = m_Camera.GetView();
+        const glm::vec3 cameraPos = m_Camera.GetPosition();
         glm::mat4 projection = m_Camera.GetProjection(aspect);
 
         model = glm::rotate(model, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
