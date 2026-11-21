@@ -1,10 +1,19 @@
+#include <iostream>
+#include <exception>
 #include "viewer.h"
 
 int main()
 {
-    Viewer viewer = Viewer();
+    try
+    {
+        Viewer viewer;
+        viewer.Update();
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "[ERROR] " << e.what() << '\n';
+        return EXIT_FAILURE;
+    }
 
-    viewer.Update();
-
-    return 0;
+    return EXIT_SUCCESS;
 }
