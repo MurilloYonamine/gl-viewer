@@ -42,7 +42,6 @@ std::vector<Mesh> Model::LoadMeshes(std::string_view path)
         for (size_t j = 0; j < mesh->mNumVertices; j++)
         {
             const aiVector3D &vertex = mesh->mVertices[j];
-            const aiColor4D &color = mesh->mColors[0][j];
 
             modelVertices.push_back(vertex.x);
             modelVertices.push_back(vertex.y);
