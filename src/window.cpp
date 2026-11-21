@@ -39,6 +39,8 @@ Window::Window(const int width, const int height, const std::string_view title)
         throw std::runtime_error("Failed to initialize GLEW");
     }
 
+    glEnable(GL_DEPTH_TEST);
+
     int flags;
     glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 
@@ -91,4 +93,18 @@ void Window::ProcessEvents() const
 bool Window::IsOpen() const
 {
     return !glfwWindowShouldClose(m_Window);
+}
+
+float Window::GetAspectRatio() const
+{
+    int width, height;
+
+    glfwGetFramebufferSize(m_Window, &width, &height);
+
+    if (height == 0)
+    {
+        return 1.0f;
+    }
+
+    return static_cast<float>(width) / height;
 }
