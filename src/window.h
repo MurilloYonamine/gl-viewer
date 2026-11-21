@@ -23,4 +23,9 @@ public:
 
 private:
     GLFWwindow *m_Window;
+
+    void InitializeGLFW(int width, int height, std::string_view title);
+    void InitializeOpenGL();
+    void ConfigureViewport();
+    void ConfigureDebugOutput();
 };
