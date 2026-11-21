@@ -1,11 +1,17 @@
 #include "simulation.h"
 #include "shader.h"
 
+#include <iostream>
+
 #include <iterator>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
 
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -99,6 +105,73 @@ void Simulation::Update()
     float aspect = 800.0f / 600.0f;
     float rotation = 1.0f;
 
+    Assimp::Importer importer;
+
+    const aiScene *scene = importer.ReadFile(
+        "res/models/triangle.obj",
+        aiProcess_Triangulate);
+
+    std::vector<float> modelVertices;
+    std::vector<unsigned int> modelIndices;
+
+    if (scene != nullptr)
+    {
+        std::cout << "Loading the model..." << std::endl;
+        const aiMesh *mesh = scene->mMeshes[0];
+
+        std::cout << "Vertices: " << mesh->mNumVertices << std::endl;
+        std::cout << "Faces: " << mesh->mNumFaces << std::endl;
+
+        for (size_t i = 0; i < mesh->mNumVertices; i++)
+        {
+            std::cout << "Vertex " << i << ": ";
+
+            const aiVector3D &vertex = mesh->mVertices[i];
+
+            std::cout << vertex.x << ", "
+                      << vertex.y << ", "
+                      << vertex.z << "\n";
+
+            modelVertices.push_back(vertex.x);
+            modelVertices.push_back(vertex.y);
+            modelVertices.push_back(vertex.z);
+            modelVertices.push_back(1.0f); // R
+            modelVertices.push_back(1.0f); // G
+            modelVertices.push_back(1.0f); // B
+        }
+        for (size_t i = 0; i < mesh->mNumFaces; i++)
+        {
+            const aiFace &face = mesh->mFaces[i];
+
+            std::cout << "Face " << i << ": ";
+            for (size_t j = 0; j < face.mNumIndices; j++)
+            {
+                std::cout << face.mIndices[j] << " ";
+                modelIndices.push_back(face.mIndices[j]);
+            }
+            std::cout << '\n';
+        }
+
+        std::cout << "Floats: " << modelVertices.size() << '\n';
+        std::cout << "Indices: " << modelIndices.size() << '\n';
+    }
+    else
+    {
+        std::cout << importer.GetErrorString() << std::endl;
+    }
+
+    VertexArray modelVao;
+    VertexBuffer modelVbo(modelVertices.data(), modelVertices.size() * sizeof(float));
+    IndexBuffer modelIbo(modelIndices.data(), modelIndices.size());
+
+    VertexBufferLayout modelLayout;
+
+    modelLayout.PushFloat(3); // Position
+    modelLayout.PushFloat(3); // Color
+
+    modelVao.AddBuffer(modelVbo, modelLayout);
+    modelVao.Unbind();
+
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
     {
@@ -133,8 +206,15 @@ void Simulation::Update()
         glUniformMatrix4fv(shaderView, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
-        m_Vao.Bind();
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_Ibo.GetCount()), GL_UNSIGNED_INT, nullptr);
+        // m_Vao.Bind();
+        // glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_Ibo.GetCount()), GL_UNSIGNED_INT, nullptr);
+
+        modelVao.Bind();
+        glDrawElements(
+            GL_TRIANGLES,
+            static_cast<GLsizei>(modelIbo.GetCount()),
+            GL_UNSIGNED_INT,
+            nullptr);
 
         shader.Unbind();
 
