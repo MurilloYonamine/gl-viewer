@@ -10,17 +10,17 @@
 
 class Window
 {
-    public:
-        Window(int width = 800, int height = 600, std::string_view title = "OpenGL Window");
-        ~Window();
-        void Update() const;
-        void SwapBuffers() const;
-        void ProcessEvents() const;
-        bool IsOpen() const;
-        GLFWwindow* GetNativeWindow() const { return m_Window; }
-        float GetAspectRatio() const;
-        float GetTime() const;
+public:
+    Window(int width = 800, int height = 600, std::string_view title = "OpenGL Window");
+    ~Window();
+    void Update() const;
+    void SwapBuffers() const;
+    void ProcessEvents() const;
+    bool IsOpen() const;
+    GLFWwindow *GetNativeWindow() const { return m_Window; }
+    float GetAspectRatio() const;
+    float GetTime() const { return glfwGetTime(); }
 
-    private:
-        GLFWwindow* m_Window;
+private:
+    GLFWwindow *m_Window;
 };

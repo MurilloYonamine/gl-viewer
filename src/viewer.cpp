@@ -11,7 +11,7 @@ Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
 
 void Viewer::Update()
 {
-    float lastFrame = m_Window.GetTime();
+    double lastFrame = m_Window.GetTime();
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -20,8 +20,8 @@ void Viewer::Update()
         m_Window.ProcessEvents();
         m_Window.Update();
 
-        const float currentFrame = m_Window.GetTime();
-        const float deltaTime = currentFrame - lastFrame;
+        const double currentFrame = m_Window.GetTime();
+        const float deltaTime = static_cast<float>(currentFrame - lastFrame);
         lastFrame = currentFrame;
 
         m_Transform.Update(deltaTime);
