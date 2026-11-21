@@ -25,15 +25,18 @@ void main()
 in vec3 vertexColor;
 in vec3 vertexNormal;
 
+uniform vec3 u_lightDirection;
+uniform float u_ambientStrength;
+
 out vec4 FragColor;
 
 void main()
 {
     FragColor = vec4(vertexColor, 1.0);
-    vec3 lightDir = normalize(vec3(0.5, 1.0, 1.0));
-    
+    vec3 lightDir = normalize(u_lightDirection);
+
     vec3 normal = normalize(vertexNormal);
-    float ambient = 0.2;
+    float ambient = u_ambientStrength;
     float diff = max(dot(normal, lightDir), 0.0);
     float lightIntensity = ambient + diff;
 

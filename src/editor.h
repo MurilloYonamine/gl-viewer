@@ -5,5 +5,5 @@
 class Editor
 {
     public:
-        void OnGUI(Camera& camera);
+        void OnGUI(Camera &camera, glm::vec3& lightDirection, float& ambientStrength);
 };

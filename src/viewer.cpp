@@ -35,12 +35,18 @@ void Viewer::Update()
     const GLint shaderView = glGetUniformLocation(shader.GetID(), "u_View");
     const GLint shaderProjection = glGetUniformLocation(shader.GetID(), "u_Projection");
 
+    const GLint shaderLightDirection = glGetUniformLocation(shader.GetID(), "u_lightDirection");
+    const GLint shaderAmbientStrength = glGetUniformLocation(shader.GetID(), "u_ambientStrength");
+
     float lastFrame = static_cast<float>(glfwGetTime());
     float deltaTime = 0.0f;
     float rotationAngle = 0.0f;
 
     float aspect = 800.0f / 600.0f;
     float rotation = 1.0f;
+
+    glm::vec3 lightDirection{0.5f, 1.0f, 1.0f};
+    float ambientStrength = 0.2f;
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -54,7 +60,7 @@ void Viewer::Update()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        m_Editor.OnGUI(m_Camera);
+        m_Editor.OnGUI(m_Camera, lightDirection, ambientStrength);
 
         // Transformation
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -75,6 +81,9 @@ void Viewer::Update()
         glUniformMatrix4fv(shaderModel, 1, GL_FALSE, glm::value_ptr(model));
         glUniformMatrix4fv(shaderView, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, glm::value_ptr(projection));
+
+        glUniform3f(shaderLightDirection, lightDirection.x, lightDirection.y, lightDirection.z);
+        glUniform1f(shaderAmbientStrength, ambientStrength);
 
         m_Model.Draw();
 
