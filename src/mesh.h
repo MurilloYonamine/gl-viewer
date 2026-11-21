@@ -10,8 +10,12 @@ class Mesh
 {
     public:
         Mesh(const std::vector<float> &vertices, const std::vector<unsigned int> &indices);
+        
         Mesh(const Mesh &) = delete;
         Mesh &operator=(const Mesh &) = delete;
+        
+        Mesh(Mesh &&other) noexcept = default;
+        Mesh &operator=(Mesh &&other) noexcept = default;
 
         void Draw();
 
