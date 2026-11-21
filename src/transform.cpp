@@ -13,7 +13,7 @@ void Transform::Update(float deltaTime)
     autoRotation = glm::rotate(autoRotation, autoRotateSpeed * deltaTime, glm::normalize(autoRotateAxis));
 }
 
-glm::mat4 Transform::GetMatrix() const
+glm::mat4 Transform::GetModelMatrix() const
 {
     glm::mat4 model(1.0f);
 

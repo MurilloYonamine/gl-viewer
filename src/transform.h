@@ -15,5 +15,5 @@ struct Transform
     glm::vec3 autoRotateAxis{0.0f, 1.0f, 0.0f};
 
     void Update(float deltaTime);
-    glm::mat4 GetMatrix() const;
+    glm::mat4 GetModelMatrix() const;
 };

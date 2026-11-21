@@ -21,7 +21,7 @@ void Viewer::Update()
         m_Window.ProcessEvents();
         m_Window.Update();
 
-        const float currentFrame = static_cast<float>(glfwGetTime());
+        const float currentFrame = m_Window.GetTime();
         const float deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -39,7 +39,7 @@ void Viewer::Update()
 
 void Viewer::RenderScene()
 {
-    glm::mat4 model = m_Transform.GetMatrix();
+    glm::mat4 model = m_Transform.GetModelMatrix();
     glm::mat4 view = m_Camera.GetView();
     glm::vec3 cameraPos = m_Camera.GetPosition();
     glm::mat4 projection = m_Camera.GetProjection(m_Window.GetAspectRatio());
