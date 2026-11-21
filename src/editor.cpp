@@ -32,7 +32,7 @@ void Editor::EndFrame()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Editor::OnGUI(Camera &camera, glm::vec3 &lightDirection, float &ambientStrength, float& specularStrength)
+void Editor::OnGUI(Camera &camera, LightingSettings& lighting)
 {
     ImGui::Begin("GL Viewer");
     if (ImGui::CollapsingHeader("Camera"))
@@ -56,9 +56,9 @@ void Editor::OnGUI(Camera &camera, glm::vec3 &lightDirection, float &ambientStre
 
     if (ImGui::CollapsingHeader("Lighting"))
     {
-        ImGui::SliderFloat3("Light Direction", glm::value_ptr(lightDirection), -1.0f, 1.0f);
-        ImGui::SliderFloat("Ambient Strength", &ambientStrength, 0.0f, 1.0f);
-        ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f);
+        ImGui::SliderFloat3("Light Direction", glm::value_ptr(lighting.direction), -1.0f, 1.0f);
+        ImGui::SliderFloat("Ambient Strength", &lighting.ambientStrength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Specular Strength", &lighting.specularStrength, 0.0f, 1.0f);
     }
 
     ImGui::End();

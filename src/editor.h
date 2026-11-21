@@ -2,6 +2,7 @@
 
 #include "camera.h"
 #include "window.h"
+#include "lighting_settings.h"
 
 class Editor
 {
@@ -11,7 +12,7 @@ class Editor
 
         void BeginFrame();
         void EndFrame();
-        void OnGUI(Camera &camera, glm::vec3& lightDirection, float& ambientStrength, float& specularStrength);
+        void OnGUI(Camera &camera, LightingSettings& lighting);
 
     private:
         Window &m_Window;
