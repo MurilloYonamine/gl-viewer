@@ -23,7 +23,7 @@ VertexArray &VertexArray::operator=(VertexArray &&other) noexcept
     return *this;
 }
 
-VertexArray::VertexArray(VertexArray &&other) noexcept
+VertexArray::VertexArray(VertexArray &&other) noexcept : m_RendererID(other.m_RendererID)
 {
     other.m_RendererID = 0;
 }
