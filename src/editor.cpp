@@ -1,6 +1,7 @@
 #include "editor.h"
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+#include <glm/gtc/type_ptr.hpp>
 
 void Editor::OnGUI(Camera &camera, glm::vec3 &lightDirection, float &ambientStrength)
 {
@@ -24,9 +25,9 @@ void Editor::OnGUI(Camera &camera, glm::vec3 &lightDirection, float &ambientStre
     ImGui::Separator();
     ImGui::Spacing();
 
-    if (ImGui::CollapsingHeader("Lightning"))
+    if (ImGui::CollapsingHeader("Lighting"))
     {
-        ImGui::SliderFloat3("Light Direction", &lightDirection.x, -1.0f, 1.0f);
+        ImGui::SliderFloat3("Light Direction", glm::value_ptr(lightDirection), -1.0f, 1.0f);
         ImGui::SliderFloat("Ambient Strength", &ambientStrength, 0.0f, 1.0f);
     }
 
