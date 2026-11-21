@@ -3,12 +3,13 @@
 #include "window.h"
 #include "editor.h"
 #include "camera.h"
+#include "mesh.h"
 
-#include "vertex_buffer.h"
-#include "vertex_array.h"
-#include "index_buffer.h"
+#include <memory>
+#include <string_view>
 
-class Simulation {
+class Simulation
+{
     public:
         Simulation();
         ~Simulation();
@@ -18,9 +19,7 @@ class Simulation {
         Window m_Window;
         Editor m_Editor;
         Camera m_Camera;
+        Mesh m_Mesh;
 
-        VertexBuffer m_Vbo;
-        VertexArray m_Vao;
-        IndexBuffer m_Ibo;
-        VertexBufferLayout m_Layout;
+        Mesh LoadMesh(std::string_view path);
 };

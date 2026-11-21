@@ -1,9 +1,8 @@
 #include "simulation.h"
 #include "shader.h"
+#include "mesh.h"
 
 #include <iostream>
-
-#include <iterator>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -17,50 +16,8 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
-namespace
-{
-    constexpr float vertices[] = {
-        // X      Y      Z         R     G     B
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // 0
-        0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,  // 1
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f,   // 2
-        -0.5f, 0.5f, -0.5f, 1.0f, 1.0f, 0.0f,  // 3
-
-        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 1.0f, // 4
-        0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 1.0f,  // 5
-        0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f,   // 6
-        -0.5f, 0.5f, 0.5f, 0.5f, 0.5f, 0.5f   // 7
-    };
-
-    constexpr unsigned int indices[] = {
-        // front (+Z)
-        4, 5, 6,
-        4, 6, 7,
-
-        // back (-Z)
-        1, 0, 3,
-        1, 3, 2,
-
-        // left (-X)
-        0, 4, 7,
-        0, 7, 3,
-
-        // right (+X)
-        5, 1, 2,
-        5, 2, 6,
-
-        // top (+Y)
-        3, 7, 6,
-        3, 6, 2,
-
-        // bottom (-Y)
-        0, 1, 5,
-        0, 5, 4};
-}
-
 Simulation::Simulation() : m_Window(800, 600, "GL Viewer"),
-                           m_Vbo(vertices, sizeof(vertices)),
-                           m_Ibo(indices, std::size(indices))
+                           m_Mesh(LoadMesh("res/models/triangle.obj"))
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -69,19 +26,6 @@ Simulation::Simulation() : m_Window(800, 600, "GL Viewer"),
     ImGui::StyleColorsDark();
     ImGui_ImplGlfw_InitForOpenGL(m_Window.GetNativeWindow(), true);
     ImGui_ImplOpenGL3_Init("#version 460");
-
-    m_Vao.Bind();
-    m_Ibo.Bind();
-    m_Vbo.Bind();
-
-    m_Layout.PushFloat(3); // position
-    m_Layout.PushFloat(3); // color
-
-    m_Vao.AddBuffer(m_Vbo, m_Layout);
-
-    // cleaning
-    m_Vbo.Unbind();
-    m_Vao.Unbind();
 }
 
 Simulation::~Simulation()
@@ -104,73 +48,6 @@ void Simulation::Update()
 
     float aspect = 800.0f / 600.0f;
     float rotation = 1.0f;
-
-    Assimp::Importer importer;
-
-    const aiScene *scene = importer.ReadFile(
-        "res/models/triangle.obj",
-        aiProcess_Triangulate);
-
-    std::vector<float> modelVertices;
-    std::vector<unsigned int> modelIndices;
-
-    if (scene != nullptr)
-    {
-        std::cout << "Loading the model..." << std::endl;
-        const aiMesh *mesh = scene->mMeshes[0];
-
-        std::cout << "Vertices: " << mesh->mNumVertices << std::endl;
-        std::cout << "Faces: " << mesh->mNumFaces << std::endl;
-
-        for (size_t i = 0; i < mesh->mNumVertices; i++)
-        {
-            std::cout << "Vertex " << i << ": ";
-
-            const aiVector3D &vertex = mesh->mVertices[i];
-
-            std::cout << vertex.x << ", "
-                      << vertex.y << ", "
-                      << vertex.z << "\n";
-
-            modelVertices.push_back(vertex.x);
-            modelVertices.push_back(vertex.y);
-            modelVertices.push_back(vertex.z);
-            modelVertices.push_back(1.0f); // R
-            modelVertices.push_back(1.0f); // G
-            modelVertices.push_back(1.0f); // B
-        }
-        for (size_t i = 0; i < mesh->mNumFaces; i++)
-        {
-            const aiFace &face = mesh->mFaces[i];
-
-            std::cout << "Face " << i << ": ";
-            for (size_t j = 0; j < face.mNumIndices; j++)
-            {
-                std::cout << face.mIndices[j] << " ";
-                modelIndices.push_back(face.mIndices[j]);
-            }
-            std::cout << '\n';
-        }
-
-        std::cout << "Floats: " << modelVertices.size() << '\n';
-        std::cout << "Indices: " << modelIndices.size() << '\n';
-    }
-    else
-    {
-        std::cout << importer.GetErrorString() << std::endl;
-    }
-
-    VertexArray modelVao;
-    VertexBuffer modelVbo(modelVertices.data(), modelVertices.size() * sizeof(float));
-    IndexBuffer modelIbo(modelIndices.data(), modelIndices.size());
-
-    VertexBufferLayout modelLayout;
-
-    modelLayout.PushFloat(3); // Position
-    modelLayout.PushFloat(3); // Color
-
-    modelVao.AddBuffer(modelVbo, modelLayout);
-    modelVao.Unbind();
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -206,15 +83,7 @@ void Simulation::Update()
         glUniformMatrix4fv(shaderView, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
-        // m_Vao.Bind();
-        // glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_Ibo.GetCount()), GL_UNSIGNED_INT, nullptr);
-
-        modelVao.Bind();
-        glDrawElements(
-            GL_TRIANGLES,
-            static_cast<GLsizei>(modelIbo.GetCount()),
-            GL_UNSIGNED_INT,
-            nullptr);
+        m_Mesh.Draw();
 
         shader.Unbind();
 
@@ -224,4 +93,43 @@ void Simulation::Update()
 
         m_Window.SwapBuffers();
     }
+}
+
+Mesh Simulation::LoadMesh(std::string_view path)
+{
+    Assimp::Importer importer;
+
+    const aiScene *scene = importer.ReadFile(path.data(), aiProcess_Triangulate);
+    std::vector<float> modelVertices;
+    std::vector<unsigned int> modelIndices;
+
+    if (scene != nullptr)
+    {
+        const aiMesh *mesh = scene->mMeshes[0];
+        for (size_t i = 0; i < mesh->mNumVertices; i++)
+        {
+            const aiVector3D &vertex = mesh->mVertices[i];
+
+            modelVertices.push_back(vertex.x);
+            modelVertices.push_back(vertex.y);
+            modelVertices.push_back(vertex.z);
+            modelVertices.push_back(1.0f); // R
+            modelVertices.push_back(1.0f); // G
+            modelVertices.push_back(1.0f); // B
+        }
+
+        for (size_t i = 0; i < mesh->mNumFaces; i++)
+        {
+            const aiFace &face = mesh->mFaces[i];
+            for (size_t j = 0; j < face.mNumIndices; j++)
+            {
+                modelIndices.push_back(face.mIndices[j]);
+            }
+        }
+    }
+    else
+    {
+        std::cout << importer.GetErrorString() << std::endl;
+    }
+    return Mesh(modelVertices, modelIndices);
 }
