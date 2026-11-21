@@ -43,7 +43,6 @@ void Viewer::RenderScene()
     glm::vec3 cameraPos = m_Camera.GetPosition();
     glm::mat4 projection = m_Camera.GetProjection(m_Window.GetAspectRatio());
 
-    // Scene
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_Shader.Bind();
