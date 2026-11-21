@@ -2,22 +2,15 @@
 #include "shader.h"
 #include "mesh.h"
 
-#include <iostream>
-
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
 Simulation::Simulation() : m_Window(800, 600, "GL Viewer"),
-                           m_Mesh(LoadMesh("res/models/triangle.obj"))
+                           m_Model("res/models/triangle.obj")
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -83,7 +76,7 @@ void Simulation::Update()
         glUniformMatrix4fv(shaderView, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, glm::value_ptr(projection));
 
-        m_Mesh.Draw();
+        m_Model.Draw();
 
         shader.Unbind();
 
@@ -93,42 +86,4 @@ void Simulation::Update()
 
         m_Window.SwapBuffers();
     }
-}
-
-Mesh Simulation::LoadMesh(std::string_view path)
-{
-    Assimp::Importer importer;
-
-    const aiScene *scene = importer.ReadFile(path.data(), aiProcess_Triangulate);
-    std::vector<float> modelVertices;
-    std::vector<unsigned int> modelIndices;
-
-    if (scene == nullptr)
-    {
-        throw std::runtime_error(importer.GetErrorString());
-    }
-
-    const aiMesh *mesh = scene->mMeshes[0];
-    for (size_t i = 0; i < mesh->mNumVertices; i++)
-    {
-        const aiVector3D &vertex = mesh->mVertices[i];
-
-        modelVertices.push_back(vertex.x);
-        modelVertices.push_back(vertex.y);
-        modelVertices.push_back(vertex.z);
-        modelVertices.push_back(1.0f); // R
-        modelVertices.push_back(1.0f); // G
-        modelVertices.push_back(1.0f); // B
-    }
-
-    for (size_t i = 0; i < mesh->mNumFaces; i++)
-    {
-        const aiFace &face = mesh->mFaces[i];
-        for (size_t j = 0; j < face.mNumIndices; j++)
-        {
-            modelIndices.push_back(face.mIndices[j]);
-        }
-    }
-    
-    return Mesh(modelVertices, modelIndices);
 }
