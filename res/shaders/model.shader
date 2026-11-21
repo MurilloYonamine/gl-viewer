@@ -43,10 +43,19 @@ void main()
     
     vec3 reflectDir = reflect(-lightDir, normal);
 
-    float spec = u_specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    float diff = max(dot(normal, lightDir), 0.0);
+    float spec = 0.0;
+
+    if (diff > 0.0)
+    {
+        spec = u_specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+    }
+    else
+    {
+        spec = 0.0;
+    }
     
     float ambient = u_ambientStrength;
-    float diff = max(dot(normal, lightDir), 0.0);
     float lightIntensity = ambient + diff + spec;
 
     vec3 result = lightIntensity * vertexColor;
