@@ -5,11 +5,11 @@
 #include "camera.h"
 #include "model.h"
 
-class Simulation
+class Viewer
 {
     public:
-        Simulation();
-        ~Simulation();
+        Viewer();
+        ~Viewer();
         void Update();
 
     private:

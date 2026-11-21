@@ -1,10 +1,10 @@
-#include "simulation.h"
+#include "viewer.h"
 
 int main()
 {
-    Simulation simulation = Simulation();
+    Viewer viewer = Viewer();
 
-    simulation.Update();
+    viewer.Update();
 
     return 0;
 }

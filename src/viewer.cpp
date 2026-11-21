@@ -1,4 +1,4 @@
-#include "simulation.h"
+#include "viewer.h"
 #include "shader.h"
 #include "mesh.h"
 
@@ -9,8 +9,8 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>
 
-Simulation::Simulation() : m_Window(800, 600, "GL Viewer"),
-                           m_Model("res/models/triangle.obj")
+Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
+                   m_Model("res/models/monkey.obj")
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -21,14 +21,14 @@ Simulation::Simulation() : m_Window(800, 600, "GL Viewer"),
     ImGui_ImplOpenGL3_Init("#version 460");
 }
 
-Simulation::~Simulation()
+Viewer::~Viewer()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void Simulation::Update()
+void Viewer::Update()
 {
     Shader shader("res/shaders/basic.shader");
     const GLint shaderModel = glGetUniformLocation(shader.GetID(), "u_Model");
