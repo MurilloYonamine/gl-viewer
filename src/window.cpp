@@ -108,3 +108,8 @@ float Window::GetAspectRatio() const
 
     return static_cast<float>(width) / height;
 }
+
+float Window::GetTime() const
+{
+    return static_cast<float>(glfwGetTime());
+}

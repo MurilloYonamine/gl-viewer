@@ -19,6 +19,7 @@ class Window
         bool IsOpen() const;
         GLFWwindow* GetNativeWindow() const { return m_Window; }
         float GetAspectRatio() const;
+        float GetTime() const;
 
     private:
         GLFWwindow* m_Window;
