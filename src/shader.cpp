@@ -1,7 +1,11 @@
 #include "shader.h"
+
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
+#include <glm/gtc/type_ptr.hpp>
+
 
 Shader::Shader(const std::string &filepath)
 {
@@ -79,6 +83,33 @@ void Shader::Bind()
 void Shader::Unbind()
 {
     glUseProgram(0);
+}
+
+GLint Shader::GetUniformLocation(const std::string &name) const
+{
+    GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+    return location;
+}
+
+void Shader::SetUniform(const std::string &name, float value)
+{
+    Bind();
+    GLint location = GetUniformLocation(name);
+    glUniform1f(location, value);
+}
+
+void Shader::SetUniform(const std::string &name, const glm::vec3 &value)
+{
+    Bind();
+    GLint location = GetUniformLocation(name);
+    glUniform3f(location, value.x, value.y, value.z);
+}
+
+void Shader::SetUniform(const std::string &name, const glm::mat4 &value)
+{
+    Bind();
+    GLint location = GetUniformLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
 GLuint Shader::CompileShader(GLenum type, const char *source)

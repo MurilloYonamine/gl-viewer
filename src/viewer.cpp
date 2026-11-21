@@ -85,15 +85,15 @@ void Viewer::Update()
 
         shader.Bind();
 
-        glUniformMatrix4fv(shaderModel, 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(shaderView, 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(shaderProjection, 1, GL_FALSE, glm::value_ptr(projection));
+        shader.SetUniform("u_Model", model);
+        shader.SetUniform("u_View", view);
+        shader.SetUniform("u_Projection", projection);
+        
+        shader.SetUniform("u_lightDirection", lightDirection);
+        shader.SetUniform("u_ambientStrength", ambientStrength);
+        shader.SetUniform("u_specularStrength", specularStrength);
 
-        glUniform3f(shaderLightDirection, lightDirection.x, lightDirection.y, lightDirection.z);
-        glUniform1f(shaderAmbientStrength, ambientStrength);
-        glUniform1f(shaderSpecularStrength, specularStrength);
-
-        glUniform3f(shaderCameraPosition, cameraPos.x, cameraPos.y, cameraPos.z);
+        shader.SetUniform("u_cameraPos", cameraPos);
 
         m_Model.Draw();
 

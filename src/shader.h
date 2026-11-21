@@ -1,7 +1,10 @@
 #pragma once
 
-#include "gl/glew.h"
 #include <string>
+#include <GL/glew.h>
+
+#include <glm/glm.hpp>
+
 
 class Shader
 {
@@ -16,6 +19,11 @@ class Shader
         void Unbind();
 
         GLuint GetID() const { return m_RendererID; }
+        GLint GetUniformLocation(const std::string& name) const;
+
+        void SetUniform(const std::string &name, float value);
+        void SetUniform(const std::string &name, const glm::vec3 &value);
+        void SetUniform(const std::string &name, const glm::mat4 &value);
 
     private:
         GLuint m_RendererID;
