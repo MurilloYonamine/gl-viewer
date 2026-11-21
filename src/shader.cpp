@@ -8,7 +8,7 @@ Shader::Shader(const std::string &filepath)
     std::ifstream stream(filepath);
     if (!stream.is_open())
     {
-        std::cout << "ERROR: Could not open shader file: " << filepath << std::endl;
+        throw std::runtime_error("Failed to open shader file: " + filepath);
     }
 
     std::stringstream buffer;
@@ -83,8 +83,7 @@ GLuint Shader::CompileShader(GLenum type, const char *source)
 
         glGetShaderInfoLog(shader, 1024, &logLength, message);
 
-        std::cout << "ERROR: Shader compilation failed\n";
-        std::cout << message << std::endl;
+        throw std::runtime_error(std::string("Shader compilation failed: ") + message);
     }
 
     return shader;
@@ -107,8 +106,7 @@ GLuint Shader::CreateShaderProgram(GLuint vertexShader, GLuint fragmentShader)
         GLchar message[1024];
         glGetProgramInfoLog(shaderProgram, 1024, &logLength, message);
 
-        std::cout << "ERROR: Creating Shader Program failed\n";
-        std::cout << message << std::endl;
+        throw std::runtime_error(std::string("Shader program linking failed: ") + message);
     }
 
     return shaderProgram;
