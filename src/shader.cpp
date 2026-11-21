@@ -25,10 +25,25 @@ Shader::Shader(const std::string &filepath)
     std::string vertexSource = source.substr(vertexStart, fragmentPosition - vertexStart);
     std::string fragmentSource = source.substr(fragmentStart);
 
-    GLuint vertexShader = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());
-    GLuint fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+    GLuint vertexShader = 0;
+    GLuint fragmentShader = 0;
 
-    m_RendererID = CreateShaderProgram(vertexShader, fragmentShader);
+    try
+    {
+        vertexShader = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());
+        fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+        m_RendererID = CreateShaderProgram(vertexShader, fragmentShader);
+    }
+    catch (...)
+    {
+        if (vertexShader != 0)
+            glDeleteShader(vertexShader);
+
+        if (fragmentShader != 0)
+            glDeleteShader(fragmentShader);
+
+        throw;
+    }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
