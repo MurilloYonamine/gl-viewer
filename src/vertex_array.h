@@ -7,6 +7,9 @@ class VertexArray {
     public:
         VertexArray();
         ~VertexArray();
+        VertexArray(const VertexArray&) = delete;
+        VertexArray& operator=(VertexArray&& other) noexcept;
+        VertexArray(VertexArray&& other) noexcept;
 
         void Bind();
         void Unbind();
