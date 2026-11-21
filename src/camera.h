@@ -7,7 +7,7 @@ class Camera
     public:
         Camera() = default;
 
-        glm::mat4 GetView() const;
+        glm::mat4 GetView();
         glm::mat4 GetProjection(float aspectRatio) const;
 
         float GetFov() const { return m_Fov; }
@@ -15,6 +15,8 @@ class Camera
 
         float GetYaw() const { return m_Yaw; }
         void SetYaw(float yaw);
+
+        glm::vec3 GetPosition() { return m_Position; }
 
     private:
         glm::vec3 m_Position{0.0f, 0.0f, 3.0f};
@@ -27,4 +29,6 @@ class Camera
 
         float m_Distance = 3.0f;
         float m_Yaw = 0.0f; // horizontal angle
+
+        void UpdatePosition();
 };

@@ -10,7 +10,7 @@
 #include <imgui.h>
 
 Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
-                   m_Model("res/models/monkey.obj")
+                   m_Model("res/models/sphere.obj")
 {
     glEnable(GL_DEPTH_TEST);
 
@@ -37,16 +37,19 @@ void Viewer::Update()
 
     const GLint shaderLightDirection = glGetUniformLocation(shader.GetID(), "u_lightDirection");
     const GLint shaderAmbientStrength = glGetUniformLocation(shader.GetID(), "u_ambientStrength");
+    const GLint shaderSpecularStrength = glGetUniformLocation(shader.GetID(), "u_specularStrength");
+    const GLint shaderCameraPosition = glGetUniformLocation(shader.GetID(), "u_cameraPos");
 
     float lastFrame = static_cast<float>(glfwGetTime());
     float deltaTime = 0.0f;
     float rotationAngle = 0.0f;
 
     float aspect = 800.0f / 600.0f;
-    float rotation = 1.0f;
+    float rotation = 2.0f;
 
     glm::vec3 lightDirection{0.5f, 1.0f, 1.0f};
     float ambientStrength = 0.2f;
+    float specularStrength = 0.2f;
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -60,7 +63,7 @@ void Viewer::Update()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        m_Editor.OnGUI(m_Camera, lightDirection, ambientStrength);
+        m_Editor.OnGUI(m_Camera, lightDirection, ambientStrength, specularStrength);
 
         // Transformation
         float currentFrame = static_cast<float>(glfwGetTime());
@@ -73,6 +76,8 @@ void Viewer::Update()
         glm::mat4 view = m_Camera.GetView();
         glm::mat4 projection = m_Camera.GetProjection(aspect);
 
+        model = glm::rotate(model, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+
         // Scene
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -84,6 +89,8 @@ void Viewer::Update()
 
         glUniform3f(shaderLightDirection, lightDirection.x, lightDirection.y, lightDirection.z);
         glUniform1f(shaderAmbientStrength, ambientStrength);
+        glUniform1f(shaderSpecularStrength, specularStrength);
+        glUniform3f(shaderCameraPosition, m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
 
         m_Model.Draw();
 

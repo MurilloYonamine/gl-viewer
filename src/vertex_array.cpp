@@ -1,5 +1,4 @@
 #include "vertex_array.h"
-#include <cstdint>
 
 VertexArray::VertexArray()
 {

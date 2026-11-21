@@ -1,16 +1,10 @@
 #include "camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-glm::mat4 Camera::GetView() const
+
+glm::mat4 Camera::GetView()
 {
-    glm::vec3 position;
-
-    position.x = m_Target.x + m_Distance * glm::sin(m_Yaw);
-    position.y = m_Target.y;
-    position.z = m_Target.z + m_Distance * glm::cos(m_Yaw);
-
-    glm::mat4 view = glm::lookAt(position, m_Target, m_Up);
-
+    glm::mat4 view = glm::lookAt(m_Position, m_Target, m_Up);
     return view;
 }
 
@@ -28,4 +22,12 @@ void Camera::SetFov(float fov)
 void Camera::SetYaw(float yaw)
 {
     m_Yaw = yaw;
+    UpdatePosition();
+}
+
+void Camera::UpdatePosition()
+{
+    m_Position.x = m_Target.x + m_Distance * glm::sin(m_Yaw);
+    m_Position.y = m_Target.y;
+    m_Position.z = m_Target.z + m_Distance * glm::cos(m_Yaw);
 }
