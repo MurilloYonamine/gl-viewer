@@ -73,9 +73,6 @@ void Window::Update() const
     /* Process input */
     if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(m_Window, true);
-
-    /* Render here */
-    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 /* Swap front and back buffers */
