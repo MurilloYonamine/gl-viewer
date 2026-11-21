@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "vertex.h"
 
 Model::Model(std::string_view path)
 {
@@ -23,44 +24,44 @@ std::vector<Mesh> Model::LoadMeshes(std::string_view path)
 {
     Assimp::Importer importer;
 
-    const aiScene *scene = importer.ReadFile(std::string(path), aiProcess_Triangulate);
+    const aiScene *scene = importer.ReadFile(std::string(path), aiProcess_Triangulate | aiProcess_GenSmoothNormals);
     std::vector<Mesh> meshes;
-    
+
     if (scene == nullptr)
     {
         throw std::runtime_error(importer.GetErrorString());
     }
-    
+
     meshes.reserve(scene->mNumMeshes);
 
     for (size_t i = 0; i < scene->mNumMeshes; i++)
     {
-        std::vector<float> modelVertices;
+        std::vector<Vertex> modelVertices;
         std::vector<unsigned int> modelIndices;
 
         const aiMesh *mesh = scene->mMeshes[i];
         for (size_t j = 0; j < mesh->mNumVertices; j++)
         {
-            const aiVector3D &vertex = mesh->mVertices[j];
+            Vertex vertex{};
 
-            modelVertices.push_back(vertex.x);
-            modelVertices.push_back(vertex.y);
-            modelVertices.push_back(vertex.z);
+            const aiVector3D &position = mesh->mVertices[j];
+
+            vertex.position = {position.x, position.y, position.z};
 
             if (mesh->HasVertexColors(0))
             {
                 const aiColor4D &color = mesh->mColors[0][j];
-
-                modelVertices.push_back(color.r);
-                modelVertices.push_back(color.g);
-                modelVertices.push_back(color.b);
+                vertex.color = {color.r, color.g, color.b};
             }
             else
             {
-                modelVertices.push_back(0.6f);
-                modelVertices.push_back(0.6f);
-                modelVertices.push_back(0.6f);
+                vertex.color = {0.6f, 0.6f, 0.6f};
             }
+
+            const aiVector3D &normal = mesh->mNormals[j];
+            vertex.normal = {normal.x, normal.y, normal.z};
+            
+            modelVertices.push_back(vertex);
         }
 
         for (size_t j = 0; j < mesh->mNumFaces; j++)
