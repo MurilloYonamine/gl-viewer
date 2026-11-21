@@ -12,6 +12,22 @@ VertexBuffer::~VertexBuffer()
     glDeleteBuffers(1, &m_RendererID);
 }
 
+VertexBuffer &VertexBuffer::operator=(VertexBuffer&& other) noexcept
+{
+    if(this != &other) {
+        glDeleteBuffers(1, &m_RendererID);
+        m_RendererID = other.m_RendererID;
+        other.m_RendererID = 0;
+    }
+
+    return *this;
+}
+
+VertexBuffer::VertexBuffer(VertexBuffer &&other) noexcept : m_RendererID(other.m_RendererID)
+{
+    other.m_RendererID = 0;
+}
+
 void VertexBuffer::Bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
