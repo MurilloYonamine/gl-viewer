@@ -3,106 +3,51 @@
 #include "mesh.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <backends/imgui_impl_glfw.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <imgui.h>
 
 Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
-                   m_Model("res/models/sphere.obj")
-{
-    glEnable(GL_DEPTH_TEST);
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetNativeWindow(), true);
-    ImGui_ImplOpenGL3_Init("#version 460");
-}
-
-Viewer::~Viewer()
-{
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-}
+                   m_Editor(m_Window),
+                   m_Model("res/models/sphere.obj"),
+                   m_Shader("res/shaders/model.shader") {}
 
 void Viewer::Update()
 {
-    Shader shader("res/shaders/model.shader");
-    const GLint shaderModel = glGetUniformLocation(shader.GetID(), "u_Model");
-    const GLint shaderView = glGetUniformLocation(shader.GetID(), "u_View");
-    const GLint shaderProjection = glGetUniformLocation(shader.GetID(), "u_Projection");
-
-    const GLint shaderLightDirection = glGetUniformLocation(shader.GetID(), "u_lightDirection");
-    const GLint shaderAmbientStrength = glGetUniformLocation(shader.GetID(), "u_ambientStrength");
-    const GLint shaderSpecularStrength = glGetUniformLocation(shader.GetID(), "u_specularStrength");
-    const GLint shaderCameraPosition = glGetUniformLocation(shader.GetID(), "u_cameraPos");
-
-    float lastFrame = static_cast<float>(glfwGetTime());
-    float deltaTime = 0.0f;
-    float rotationAngle = 0.0f;
-
-    float aspect = 800.0f / 600.0f;
-    float rotation = 2.0f;
-
-    glm::vec3 lightDirection{0.5f, 1.0f, 1.0f};
-    float ambientStrength = 0.2f;
-    float specularStrength = 0.2f;
-
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
     {
         // Window
         m_Window.ProcessEvents();
         m_Window.Update();
-
-        // Imgui
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
         
-        m_Editor.OnGUI(m_Camera, lightDirection, ambientStrength, specularStrength);
-        
-        // Transformation
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
-        
-        rotationAngle += rotation * deltaTime;
-        
-        glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 view = m_Camera.GetView();
-        const glm::vec3 cameraPos = m_Camera.GetPosition();
-        glm::mat4 projection = m_Camera.GetProjection(aspect);
+        m_Editor.BeginFrame();
+        m_Editor.OnGUI(m_Camera, m_Lighting);
 
-        model = glm::rotate(model, rotationAngle, glm::vec3(0.0f, 1.0f, 0.0f));
+        RenderScene();
 
-        // Scene
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        shader.Bind();
-
-        shader.SetUniform("u_Model", model);
-        shader.SetUniform("u_View", view);
-        shader.SetUniform("u_Projection", projection);
-        
-        shader.SetUniform("u_lightDirection", lightDirection);
-        shader.SetUniform("u_ambientStrength", ambientStrength);
-        shader.SetUniform("u_specularStrength", specularStrength);
-
-        shader.SetUniform("u_cameraPos", cameraPos);
-
-        m_Model.Draw();
-
-        shader.Unbind();
-
-        // Render Imgui
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
+        m_Editor.EndFrame();
         m_Window.SwapBuffers();
     }
+}
+
+void Viewer::RenderScene()
+{
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view = m_Camera.GetView();
+    glm::vec3 cameraPos = m_Camera.GetPosition();
+    glm::mat4 projection = m_Camera.GetProjection(m_Window.GetAspectRatio());
+
+    // Scene
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    m_Shader.Bind();
+    m_Shader.SetUniform("u_Model", model);
+    m_Shader.SetUniform("u_View", view);
+    m_Shader.SetUniform("u_Projection", projection);
+
+    m_Shader.SetUniform("u_lightDirection", m_Lighting.direction);
+    m_Shader.SetUniform("u_ambientStrength", m_Lighting.ambientStrength);
+    m_Shader.SetUniform("u_specularStrength", m_Lighting.specularStrength);
+
+    m_Shader.SetUniform("u_cameraPos", cameraPos);
+    m_Model.Draw();
+    m_Shader.Unbind();
 }
