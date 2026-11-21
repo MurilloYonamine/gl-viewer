@@ -39,6 +39,23 @@ Shader::~Shader()
     glDeleteProgram(m_RendererID);
 }
 
+Shader &Shader::operator=(Shader &&other) noexcept
+{
+    if (this != &other)
+    {
+        glDeleteProgram(m_RendererID);
+        m_RendererID = other.m_RendererID;
+        other.m_RendererID = 0;
+    }
+
+    return *this;
+}
+
+Shader::Shader(Shader &&other) noexcept : m_RendererID(other.m_RendererID)
+{
+    other.m_RendererID = 0;
+}
+
 void Shader::Bind()
 {
     glUseProgram(m_RendererID);
@@ -49,7 +66,7 @@ void Shader::Unbind()
     glUseProgram(0);
 }
 
-GLuint Shader::CompileShader(GLenum type, const char* source)
+GLuint Shader::CompileShader(GLenum type, const char *source)
 {
     GLuint shader = glCreateShader(type); // ID
     glShaderSource(shader, 1, &source, nullptr);
@@ -73,7 +90,7 @@ GLuint Shader::CompileShader(GLenum type, const char* source)
     return shader;
 }
 
-GLuint Shader::CreateShaderProgram(GLuint vertexShader, GLuint fragmentShader) 
+GLuint Shader::CreateShaderProgram(GLuint vertexShader, GLuint fragmentShader)
 {
     GLuint shaderProgram = glCreateProgram();
 
@@ -84,7 +101,8 @@ GLuint Shader::CreateShaderProgram(GLuint vertexShader, GLuint fragmentShader)
 
     GLint success;
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(success != GL_TRUE) {
+    if (success != GL_TRUE)
+    {
         GLsizei logLength;
         GLchar message[1024];
         glGetProgramInfoLog(shaderProgram, 1024, &logLength, message);
