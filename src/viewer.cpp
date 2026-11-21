@@ -30,7 +30,7 @@ Viewer::~Viewer()
 
 void Viewer::Update()
 {
-    Shader shader("res/shaders/basic.shader");
+    Shader shader("res/shaders/model.shader");
     const GLint shaderModel = glGetUniformLocation(shader.GetID(), "u_Model");
     const GLint shaderView = glGetUniformLocation(shader.GetID(), "u_View");
     const GLint shaderProjection = glGetUniformLocation(shader.GetID(), "u_Projection");
