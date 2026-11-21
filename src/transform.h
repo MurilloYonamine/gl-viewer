@@ -11,7 +11,6 @@ struct Transform
     bool shouldAutoRotate = false;
     glm::mat4 autoRotation{1.0f};
     float autoRotateSpeed = 0.5f; 
-    float autoRotationAngle = 0.0f;
     glm::vec3 autoRotateAxis{0.0f, 1.0f, 0.0f};
 
     void Update(float deltaTime);
