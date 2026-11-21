@@ -1,4 +1,5 @@
 #include "vertex_array.h"
+#include <cstdint>
 
 VertexArray::VertexArray()
 {
@@ -41,24 +42,22 @@ void VertexArray::Unbind()
 void VertexArray::AddBuffer(const VertexBuffer &vbo, const VertexBufferLayout &layout)
 {
     unsigned int stride = layout.GetStride();
-    unsigned int count, type, normalized;
-
+    unsigned int count, type, normalized, offset;
     unsigned int index = 0;
-    std::size_t offset = 0;
 
     Bind();
     vbo.Bind();
 
-    for (const auto element : layout.GetElements())
+    for (const auto& element : layout.GetElements())
     {
         count = element.count;
         normalized = element.normalized;
         type = element.type;
+        offset = element.offset;
 
-        glVertexAttribPointer(index, count, type, normalized, stride, reinterpret_cast<const void *>(offset));
+        glVertexAttribPointer(index, count, type, normalized, stride, reinterpret_cast<const void *>(static_cast<std::uintptr_t>(offset)));
+        
         glEnableVertexAttribArray(index);
-
-        offset += count * sizeof(float);
         index++;
     }
 }
