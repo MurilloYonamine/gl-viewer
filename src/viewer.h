@@ -22,6 +22,7 @@ class Viewer
         Shader m_Shader;
         
         LightingSettings m_Lighting;
+        Transform m_Transform;
 
         void RenderScene();
 };
