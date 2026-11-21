@@ -12,12 +12,20 @@ Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
 
 void Viewer::Update()
 {
+    float lastFrame = static_cast<float>(glfwGetTime());
+
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
     {
         // Window
         m_Window.ProcessEvents();
         m_Window.Update();
+
+        const float currentFrame = static_cast<float>(glfwGetTime());
+        const float deltaTime = currentFrame - lastFrame;
+        lastFrame = currentFrame;
+
+        m_Transform.Update(deltaTime);
 
         m_Editor.BeginFrame();
         m_Editor.OnGUI(m_Camera, m_Lighting, m_Transform);
@@ -31,24 +39,10 @@ void Viewer::Update()
 
 void Viewer::RenderScene()
 {
-    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 model = m_Transform.GetMatrix();
     glm::mat4 view = m_Camera.GetView();
     glm::vec3 cameraPos = m_Camera.GetPosition();
     glm::mat4 projection = m_Camera.GetProjection(m_Window.GetAspectRatio());
-
-    if (m_Transform.shouldAutoRotate)
-    {
-        glm::vec3 rotationAxis = glm::normalize(m_Transform.autoRotateAxis);
-        float rotationAngle = m_Transform.autoRotateSpeed * static_cast<float>(glfwGetTime());
-        model = glm::rotate(model, rotationAngle, rotationAxis);
-    }
-
-    model = glm::translate(model, m_Transform.position);
-    model = glm::scale(model, m_Transform.scale);
-
-    model = glm::rotate(model, glm::radians(m_Transform.rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(m_Transform.rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(m_Transform.rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
 
     // Scene
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
