@@ -129,7 +129,7 @@ Mesh Simulation::LoadMesh(std::string_view path)
     }
     else
     {
-        std::cout << importer.GetErrorString() << std::endl;
+        throw std::runtime_error(importer.GetErrorString());
     }
     return Mesh(modelVertices, modelIndices);
 }
