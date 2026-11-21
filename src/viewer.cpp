@@ -3,7 +3,6 @@
 #include "mesh.h"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
                    m_Editor(m_Window),
@@ -12,7 +11,7 @@ Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
 
 void Viewer::Update()
 {
-    float lastFrame = static_cast<float>(glfwGetTime());
+    float lastFrame = m_Window.GetTime();
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
