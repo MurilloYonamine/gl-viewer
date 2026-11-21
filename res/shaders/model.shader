@@ -37,8 +37,6 @@ out vec4 FragColor;
 
 void main()
 {
-    FragColor = vec4(vertexColor, 1.0);
-
     vec3 normal = normalize(vertexNormal);
     vec3 lightDir = normalize(u_lightDirection);
     vec3 viewDir = normalize(u_cameraPos - fragPos);

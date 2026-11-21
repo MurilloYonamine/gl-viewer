@@ -50,6 +50,7 @@ void Viewer::Update()
     glm::vec3 lightDirection{0.5f, 1.0f, 1.0f};
     float ambientStrength = 0.2f;
     float specularStrength = 0.2f;
+    const glm::vec3 cameraPos = m_Camera.GetPosition();
 
     /* Loop until the user closes the window */
     while (m_Window.IsOpen())
@@ -90,7 +91,8 @@ void Viewer::Update()
         glUniform3f(shaderLightDirection, lightDirection.x, lightDirection.y, lightDirection.z);
         glUniform1f(shaderAmbientStrength, ambientStrength);
         glUniform1f(shaderSpecularStrength, specularStrength);
-        glUniform3f(shaderCameraPosition, m_Camera.GetPosition().x, m_Camera.GetPosition().y, m_Camera.GetPosition().z);
+
+        glUniform3f(shaderCameraPosition, cameraPos.x, cameraPos.y, cameraPos.z);
 
         m_Model.Draw();
 
