@@ -39,7 +39,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
     if (ImGui::CollapsingHeader("Transform"))
     {
         ImGui::SliderFloat3("Position", glm::value_ptr(transform.position), -10.0f, 10.0f);
-        ImGui::SliderFloat3("Rotation", glm::value_ptr(transform.rotation), -180.0f, 180.0f);
+        ImGui::SliderFloat3("Rotation", glm::value_ptr(transform.rotation), 0.0f, 360.0f, "%.0f");
         ImGui::SliderFloat3("Scale", glm::value_ptr(transform.scale), 0.1f, 10.0f);
         ImGui::Checkbox("Auto Rotate", &transform.shouldAutoRotate);
         if (transform.shouldAutoRotate)
@@ -62,7 +62,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         }
 
         float yaw = glm::degrees(camera.GetYaw());
-        if (ImGui::SliderFloat("Rotation", &yaw, 0.0f, 360.0f, "%.0f"))
+        if (ImGui::SliderFloat("Rotate Camera", &yaw, 0.0f, 360.0f, "%.0f"))
         {
             camera.SetYaw(glm::radians(yaw));
         }
