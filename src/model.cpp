@@ -25,12 +25,13 @@ std::vector<Mesh> Model::LoadMeshes(std::string_view path)
 
     const aiScene *scene = importer.ReadFile(std::string(path), aiProcess_Triangulate);
     std::vector<Mesh> meshes;
-    meshes.reserve(scene->mNumMeshes);
-
+    
     if (scene == nullptr)
     {
         throw std::runtime_error(importer.GetErrorString());
     }
+    
+    meshes.reserve(scene->mNumMeshes);
 
     for (size_t i = 0; i < scene->mNumMeshes; i++)
     {
@@ -41,13 +42,26 @@ std::vector<Mesh> Model::LoadMeshes(std::string_view path)
         for (size_t j = 0; j < mesh->mNumVertices; j++)
         {
             const aiVector3D &vertex = mesh->mVertices[j];
+            const aiColor4D &color = mesh->mColors[0][j];
 
             modelVertices.push_back(vertex.x);
             modelVertices.push_back(vertex.y);
             modelVertices.push_back(vertex.z);
-            modelVertices.push_back(1.0f); // R
-            modelVertices.push_back(1.0f); // G
-            modelVertices.push_back(1.0f); // B
+
+            if (mesh->HasVertexColors(0))
+            {
+                const aiColor4D &color = mesh->mColors[0][j];
+
+                modelVertices.push_back(color.r);
+                modelVertices.push_back(color.g);
+                modelVertices.push_back(color.b);
+            }
+            else
+            {
+                modelVertices.push_back(0.6f);
+                modelVertices.push_back(0.6f);
+                modelVertices.push_back(0.6f);
+            }
         }
 
         for (size_t j = 0; j < mesh->mNumFaces; j++)
