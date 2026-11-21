@@ -3,6 +3,35 @@
 #include <backends/imgui_impl_opengl3.h>
 #include <glm/gtc/type_ptr.hpp>
 
+Editor::Editor(Window &window) : m_Window(window)
+{
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(m_Window.GetNativeWindow(), true);
+    ImGui_ImplOpenGL3_Init("#version 460");
+}
+
+Editor::~Editor()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+}
+
+void Editor::BeginFrame()
+{
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void Editor::EndFrame()
+{
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
 void Editor::OnGUI(Camera &camera, glm::vec3 &lightDirection, float &ambientStrength, float& specularStrength)
 {
     ImGui::Begin("GL Viewer");
