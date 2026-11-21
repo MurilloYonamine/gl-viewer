@@ -17,16 +17,21 @@ IndexBuffer &IndexBuffer::operator=(IndexBuffer &&other) noexcept
     if (this != &other)
     {
         glDeleteBuffers(1, &m_RendererID);
+        
         m_RendererID = other.m_RendererID;
+        m_Count = other.m_Count;
+
         other.m_RendererID = 0;
+        other.m_Count = 0;
     }
 
     return *this;
 }
 
-IndexBuffer::IndexBuffer(IndexBuffer &&other) noexcept
+IndexBuffer::IndexBuffer(IndexBuffer &&other) noexcept : m_RendererID(other.m_RendererID), m_Count(other.m_Count)
 {
     other.m_RendererID = 0;
+    other.m_Count = 0;
 }
 
 void IndexBuffer::Bind()
