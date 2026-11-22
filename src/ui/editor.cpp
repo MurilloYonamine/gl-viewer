@@ -46,7 +46,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         ImGui::Checkbox("Auto Rotate", &transform.shouldAutoRotate);
         if (transform.shouldAutoRotate)
         {
-            ImGui::DragFloat3("Rotation Speed", &transform.autoRotateSpeed, 0.1f);
+            ImGui::SliderFloat("Rotation Speed", &transform.autoRotateSpeed, 0.0f, 1.0f, "Speed: %.1f");
             ImGui::DragFloat3("Rotation Axis", glm::value_ptr(transform.autoRotateAxis), -1.0f, 1.0f);
         }
     }
@@ -79,6 +79,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         ImGui::DragFloat3("Light Direction", glm::value_ptr(lighting.direction), 0.1f);
         ImGui::SliderFloat("Ambient Strength", &lighting.ambientStrength, 0.0f, 1.0f);
         ImGui::SliderFloat("Specular Strength", &lighting.specularStrength, 0.0f, 1.0f);
+        ImGui::SliderFloat("Shininess", &lighting.shininess, 1.0f, 256.0f);
     }
 
     ImGui::End();
