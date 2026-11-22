@@ -57,8 +57,19 @@ void Viewer::RenderScene()
     m_Shader.SetUniform("u_specularStrength", m_Lighting.specularStrength);
     m_Shader.SetUniform("u_shininess", m_Lighting.shininess);
 
-    m_Shader.SetUniform("u_cameraPos", cameraPos);
+    m_Shader.SetUniform("u_Material.baseColor", m_Material.baseColor);
+    m_Shader.SetUniform("u_Material.ambient", m_Material.ambient);
+    m_Shader.SetUniform("u_Material.shininess", m_Material.shininess);
+    m_Shader.SetUniform("u_Material.diffuse", m_Material.diffuse);
+    m_Shader.SetUniform("u_Material.specular", m_Material.specular);
 
+    m_Shader.SetUniform("u_CameraPos", cameraPos);
+
+    bool hasTexture = m_Material.texture != nullptr;
+    m_Shader.SetUniform("u_HasTexture", static_cast<int>(hasTexture));
+
+    if (hasTexture)
+    {
     glActiveTexture(GL_TEXTURE0);
     m_Texture.Bind();
     m_Shader.SetUniform("u_Texture", 0);

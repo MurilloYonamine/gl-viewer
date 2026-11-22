@@ -27,47 +27,62 @@ void main()
 #shader fragment
 #version 460 core
 
+struct Material {
+    vec3 baseColor;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    float shininess;
+};
+
 in vec3 vertexColor;
 in vec3 vertexNormal;
 in vec3 fragPos;
 in vec2 fragTexCoord;
 
-uniform vec3 u_lightDirection;
-uniform vec3 u_cameraPos;
+uniform vec3 u_LightDirection;
+uniform vec3 u_CameraPos;
+uniform Material u_Material;
+uniform float u_AmbientStrength;
+uniform float u_SpecularStrength;
+uniform float u_ShininessStrength;
 
-uniform float u_ambientStrength;
-uniform float u_specularStrength;
-uniform float u_shininess;
+uniform sampler2D u_Texture;
+uniform bool u_HasTexture;
 
-uniform sampler2D u_texture;
-
-out vec4 FragColor;
+out vec4 fragColor;
 
 void main()
 {
     vec3 normal = normalize(vertexNormal);
-    vec3 lightDir = normalize(u_lightDirection);
-    vec3 viewDir = normalize(u_cameraPos - fragPos);
+    vec3 lightDir = normalize(u_LightDirection);
+    vec3 viewDir = normalize(u_CameraPos - fragPos);
     
+    float diff = max(dot(normal, lightDir), 0.0); // Diffuse intensity
+    
+    // Specular intensity
     vec3 reflectDir = reflect(-lightDir, normal);
-
-    float diff = max(dot(normal, lightDir), 0.0);
     float spec = 0.0;
 
     if (diff > 0.0)
     {
-        spec = u_specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), u_shininess);
+        spec = u_SpecularStrength * pow(max(dot(viewDir, reflectDir), 0.0), u_Material.shininess);
     }
-    else
-    {
-        spec = 0.0;
-    }
+
+    // Material components
+    vec3 ambient = u_AmbientStrength * u_Material.ambient;
+    vec3 diffuse = diff * u_Material.diffuse;
+    vec3 specular = spec * u_Material.specular;
     
-    float ambient = u_ambientStrength;
-    float lightIntensity = ambient + diff + spec;
+    vec3 lightIntensity = ambient + diffuse + specular;
+    vec4 textureColor = vec4(1.0);
 
-    vec4 textureColor = texture(u_texture, fragTexCoord);
-    vec3 result = lightIntensity * textureColor.rgb;
+    if (u_HasTexture)
+    {
+        textureColor = texture(u_Texture, fragTexCoord);
+    }
+    vec3 surfaceColor = u_Material.baseColor * textureColor.rgb;
 
-    FragColor = vec4(result, textureColor.a);
+    vec3 result = lightIntensity * surfaceColor;
+    fragColor = vec4(result, textureColor.a);
 }
