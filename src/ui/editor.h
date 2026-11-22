@@ -6,6 +6,7 @@
 #include "core/window.h"
 #include "scene/lighting_settings.h"
 #include "scene/transform.h"
+#include "../rendering/material.h"
 
 class Editor
 {
@@ -15,7 +16,7 @@ class Editor
 
         void BeginFrame();
         void EndFrame();
-        void OnGUI(Camera &camera, LightingSettings& lighting, Transform& transform);
+        void OnGUI(Camera &camera, LightingSettings& lighting, Transform& transform, Material& material);
 
     private:
         Window &m_Window;

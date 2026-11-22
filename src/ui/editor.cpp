@@ -34,7 +34,7 @@ void Editor::EndFrame()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transform)
+void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transform, Material &material)
 {
     ImGui::Begin("GL Viewer");
 
@@ -79,8 +79,14 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         ImGui::DragFloat3("Light Direction", glm::value_ptr(lighting.direction), 0.1f);
         ImGui::SliderFloat("Ambient Strength", &lighting.ambientStrength, 0.0f, 1.0f);
         ImGui::SliderFloat("Specular Strength", &lighting.specularStrength, 0.0f, 1.0f);
-        ImGui::SliderFloat("Shininess", &lighting.shininess, 1.0f, 256.0f);
     }
-
+    if (ImGui::CollapsingHeader("Material"))
+    {
+        ImGui::ColorEdit3("Base Color", glm::value_ptr(material.baseColor));
+        ImGui::ColorEdit3("Ambient", glm::value_ptr(material.ambient), ImGuiColorEditFlags_Float);
+        ImGui::ColorEdit3("Diffuse", glm::value_ptr(material.diffuse), ImGuiColorEditFlags_Float);
+        ImGui::ColorEdit3("Specular", glm::value_ptr(material.specular), ImGuiColorEditFlags_Float);
+        ImGui::SliderFloat("Shininess", &material.shininess, 1.0f, 256.0f);
+    }
     ImGui::End();
 }
