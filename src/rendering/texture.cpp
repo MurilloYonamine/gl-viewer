@@ -10,7 +10,7 @@
 Texture::Texture(const std::string &filepath)
 {
     stbi_set_flip_vertically_on_load(true);
-
+    
     unsigned char *texture = stbi_load(filepath.data(), &m_Width, &m_Height, &m_Channels, 0);
 
     if (texture == nullptr)
@@ -18,10 +18,12 @@ Texture::Texture(const std::string &filepath)
         throw std::runtime_error("Failed to open texture file: " + filepath);
     }
 
+    std::string channelName = (m_Channels == 4) ? "RGBA" : "RGB";
+
     std::cout << "Name: " << filepath << '\n';
     std::cout << "Width: " << m_Width << '\n';
     std::cout << "Height: " << m_Height << '\n';
-    std::cout << "Channels: " << m_Channels << '\n';
+    std::cout << "Channels: " << channelName << '\n';
 
     glGenTextures(1, &m_RendererID);
     glBindTexture(GL_TEXTURE_2D, m_RendererID);
