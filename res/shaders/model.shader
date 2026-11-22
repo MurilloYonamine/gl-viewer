@@ -63,8 +63,8 @@ void main()
     float ambient = u_ambientStrength;
     float lightIntensity = ambient + diff + spec;
 
-    vec3 result = lightIntensity * vertexColor;
-
     vec4 textureColor = texture(u_texture, fragTexCoord);
-    FragColor = textureColor * vec4(result, 1.0);
+    vec3 result = lightIntensity * textureColor.rgb;
+
+    FragColor = vec4(result, textureColor.a);
 }
