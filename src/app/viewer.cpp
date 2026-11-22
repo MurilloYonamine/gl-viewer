@@ -3,7 +3,7 @@
 #include "app/viewer.h"
 #include <glm/glm.hpp>
 
-Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
+Viewer::Viewer() : m_Window(1280, 720, "GL Viewer"),
                    m_Editor(m_Window),
                    m_Model("res/models/Duck.gltf"),
                    m_Shader("res/shaders/model.shader"),
