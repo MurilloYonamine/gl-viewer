@@ -2,10 +2,10 @@
 
 #include "app/viewer.h"
 #include <glm/glm.hpp>
+#include <iostream>
 
 Viewer::Viewer() : m_Window(1280, 720, "GL Viewer"),
                    m_Editor(m_Window),
-                   m_Model("res/models/monkey.obj"),
                    m_Shader("res/shaders/model.shader")
 {
     // m_Texture.emplace(nullptr);
@@ -30,7 +30,34 @@ void Viewer::Update()
         m_Transform.Update(deltaTime);
 
         m_Editor.BeginFrame();
-        m_Editor.OnGUI(m_Camera, m_Lighting, m_Transform, m_Material);
+        auto selection = m_Editor.OnGUI(m_Camera, m_Lighting, m_Transform, m_Material);
+
+        if (selection.model)
+        {
+            try
+            {
+                m_Model = Model(*selection.model);
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "Failed to load model: " << e.what() << '\n';
+            }
+        }
+
+        if (selection.texture)
+        {
+            m_Material.texture = nullptr;
+
+            try
+            {
+                m_Texture.emplace(*selection.texture);
+                m_Material.texture = &m_Texture.value();
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "Failed to load texture: " << e.what() << '\n';
+            }
+        }
 
         RenderScene();
 
@@ -76,7 +103,10 @@ void Viewer::RenderScene()
         m_Shader.SetUniform("u_Texture", 0);
     }
 
-    m_Model.Draw();
+    if (m_Model)
+    {
+        m_Model->Draw();
+    }
 
     m_Shader.Unbind();
     if (m_Material.texture)

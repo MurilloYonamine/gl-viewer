@@ -24,7 +24,7 @@ class Viewer
         Window m_Window;
         Editor m_Editor;
         Camera m_Camera;
-        Model m_Model;
+        std::optional<Model> m_Model;
         Shader m_Shader;
         std::optional<Texture> m_Texture;
         Material m_Material;

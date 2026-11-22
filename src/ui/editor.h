@@ -7,6 +7,15 @@
 #include "scene/lighting_settings.h"
 #include "scene/transform.h"
 #include "../rendering/material.h"
+#include <optional>
+#include <array>
+
+
+struct FileSelection
+{
+    std::optional<std::string> model;
+    std::optional<std::string> texture;
+};
 
 class Editor
 {
@@ -16,8 +25,10 @@ class Editor
 
         void BeginFrame();
         void EndFrame();
-        void OnGUI(Camera &camera, LightingSettings& lighting, Transform& transform, Material& material);
+        FileSelection OnGUI(Camera &camera, LightingSettings &lighting, Transform &transform, Material &material);
 
     private:
         Window &m_Window;
+        std::array<char, 512> m_ModelPath{};
+        std::array<char, 512> m_TexturePath{};
 };

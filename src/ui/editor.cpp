@@ -4,6 +4,8 @@
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <ImGuiFileDialog.h>
+#include <iostream>
 
 Editor::Editor(Window &window) : m_Window(window)
 {
@@ -33,10 +35,91 @@ void Editor::EndFrame()
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
-
-void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transform, Material &material)
+FileSelection Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transform, Material &material)
 {
+    FileSelection selection;
     ImGui::Begin("GL Viewer");
+
+    if (ImGui::CollapsingHeader("Model", ImGuiTreeNodeFlags_DefaultOpen))
+    {
+        if (ImGui::Button("Open Model"))
+        {
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+
+            ImGuiFileDialog::Instance()->OpenDialog(
+                "OpenModelDialog",
+                "Select a 3D Model",
+                ".obj,.fbx,.gltf,.glb",
+                config);
+        }
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(-1.0f);
+
+        ImGui::InputText(
+            "##ModelPath",
+            m_ModelPath.data(),
+            m_ModelPath.size(),
+            ImGuiInputTextFlags_ReadOnly);
+
+        if (ImGui::Button("Open Texture"))
+        {
+            IGFD::FileDialogConfig config;
+            config.path = ".";
+
+            ImGuiFileDialog::Instance()->OpenDialog(
+                "OpenTextureDialog",
+                "Select a texture",
+                ".png,.jpg",
+                config);
+        }
+
+        ImGui::SameLine();
+        ImGui::SetNextItemWidth(-1.0f);
+        ImGui::InputText(
+            "##TexturePath",
+            m_TexturePath.data(),
+            m_TexturePath.size(),
+            ImGuiInputTextFlags_ReadOnly);
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("OpenModelDialog", ImGuiWindowFlags_NoCollapse, ImVec2(900, 550), ImVec2(1200, 700)))
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+            selection.model = ImGuiFileDialog::Instance()->GetFilePathName();
+
+            std::snprintf(
+                m_ModelPath.data(),
+                m_ModelPath.size(),
+                "%s",
+                selection.model->c_str());
+
+            std::cout << "Selected model: " << filepath << '\n';
+        }
+
+        ImGuiFileDialog::Instance()->Close();
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("OpenTextureDialog", ImGuiWindowFlags_NoCollapse, ImVec2(900, 550), ImVec2(1200, 700)))
+    {
+        if (ImGuiFileDialog::Instance()->IsOk())
+        {
+            std::string filepath = ImGuiFileDialog::Instance()->GetFilePathName();
+            selection.texture = ImGuiFileDialog::Instance()->GetFilePathName();
+
+            std::snprintf(
+                m_TexturePath.data(),
+                m_TexturePath.size(),
+                "%s",
+                selection.texture->c_str());
+
+            std::cout << "Selected texture: " << filepath << '\n';
+        }
+
+        ImGuiFileDialog::Instance()->Close();
+    }
 
     if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
     {
@@ -47,7 +130,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         if (transform.shouldAutoRotate)
         {
             ImGui::SliderFloat("Rotation Speed", &transform.autoRotateSpeed, 0.0f, 1.0f, "Speed: %.1f");
-            ImGui::DragFloat3("Rotation Axis", glm::value_ptr(transform.autoRotateAxis), -1.0f, 1.0f);
+            ImGui::DragFloat3("Rotation Axis", glm::value_ptr(transform.autoRotateAxis), 0.01f, -1.0f, 1.0f);
         }
     }
 
@@ -89,4 +172,5 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
         ImGui::SliderFloat("Shininess", &material.shininess, 1.0f, 256.0f);
     }
     ImGui::End();
+    return selection;
 }
