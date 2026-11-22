@@ -121,12 +121,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         assimp
         glm::glm
         imgui
-        stb
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-        ${glew_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${glew_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    ${stb_SOURCE_DIR}
 )
 
 source_group(TREE ${CMAKE_SOURCE_DIR}/src PREFIX "Sources" FILES ${SRC_FILES})
