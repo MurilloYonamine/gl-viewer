@@ -38,7 +38,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
 {
     ImGui::Begin("GL Viewer");
 
-    if (ImGui::CollapsingHeader("Transform"))
+    if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_DefaultOpen))
     {
         ImGui::DragFloat3("Position", glm::value_ptr(transform.position), 0.1f);
         ImGui::DragFloat3("Rotation", glm::value_ptr(transform.rotation), 0.1f);
@@ -57,10 +57,10 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
 
     if (ImGui::CollapsingHeader("Camera"))
     {
-        float fov = camera.GetFov();
-        if (ImGui::SliderFloat("Zoom", &fov, 20.0f, 100.0f))
+        float zoom = camera.GetDistance();
+        if (ImGui::SliderFloat("Zoom", &zoom, 0.5f, 20.0f, "%.0f"))
         {
-            camera.SetFov(fov);
+            camera.SetDistance(zoom);
         }
 
         float yaw = glm::degrees(camera.GetYaw());
