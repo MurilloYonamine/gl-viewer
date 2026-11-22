@@ -40,13 +40,21 @@ FetchContent_Declare(
     GIT_TAG v6.0.4
 )
 
+# ImGui
 FetchContent_Declare(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.91.9b
 )
 
-FetchContent_MakeAvailable(glfw glew glm assimp imgui)
+# stb_image
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+)
+
+FetchContent_MakeAvailable(glfw glew glm assimp imgui stb)
 
 add_library(imgui STATIC
         ${imgui_SOURCE_DIR}/imgui.cpp
@@ -113,6 +121,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         assimp
         glm::glm
         imgui
+        stb
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
