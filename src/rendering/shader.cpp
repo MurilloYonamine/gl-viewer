@@ -93,6 +93,12 @@ GLint Shader::GetUniformLocation(const std::string &name) const
     return location;
 }
 
+void Shader::SetUniform(const std::string &name, int value)
+{
+    GLint location = GetUniformLocation(name);
+    glUniform1i(location, value);
+}
+
 void Shader::SetUniform(const std::string &name, float value)
 {
     GLint location = GetUniformLocation(name);
@@ -103,6 +109,12 @@ void Shader::SetUniform(const std::string &name, const glm::vec3 &value)
 {
     GLint location = GetUniformLocation(name);
     glUniform3f(location, value.x, value.y, value.z);
+}
+
+void Shader::SetUniform(const std::string &name, const glm::vec4 &value)
+{
+    GLint location = GetUniformLocation(name);
+    glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
 void Shader::SetUniform(const std::string &name, const glm::mat4 &value)

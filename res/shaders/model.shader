@@ -36,6 +36,7 @@ uniform vec3 u_lightDirection;
 uniform float u_ambientStrength;
 uniform vec3 u_cameraPos;
 uniform float u_specularStrength;
+uniform sampler2D u_texture;
 
 out vec4 FragColor;
 
@@ -63,5 +64,7 @@ void main()
     float lightIntensity = ambient + diff + spec;
 
     vec3 result = lightIntensity * vertexColor;
-    FragColor = vec4(fragTexCoord, 0.0, 1.0);
+
+    vec4 textureColor = texture(u_texture, fragTexCoord);
+    FragColor = textureColor;
 }

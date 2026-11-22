@@ -23,8 +23,10 @@ class Shader
         GLuint GetID() const { return m_RendererID; }
         GLint GetUniformLocation(const std::string& name) const;
 
+        void SetUniform(const std::string &name, int value);
         void SetUniform(const std::string &name, float value);
         void SetUniform(const std::string &name, const glm::vec3 &value);
+        void SetUniform(const std::string &name, const glm::vec4 &value);
         void SetUniform(const std::string &name, const glm::mat4 &value);
 
     private:
