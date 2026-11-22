@@ -66,5 +66,5 @@ void main()
     vec3 result = lightIntensity * vertexColor;
 
     vec4 textureColor = texture(u_texture, fragTexCoord);
-    FragColor = textureColor;
+    FragColor = textureColor * vec4(result, 1.0);
 }
