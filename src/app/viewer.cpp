@@ -5,10 +5,11 @@
 
 Viewer::Viewer() : m_Window(1280, 720, "GL Viewer"),
                    m_Editor(m_Window),
-                   m_Model("res/models/Duck.gltf"),
-                   m_Shader("res/shaders/model.shader"),
-                   m_Texture("res/textures/DuckCM.png")
+                   m_Model("res/models/monkey.obj"),
+                   m_Shader("res/shaders/model.shader")
 {
+    // m_Texture.emplace(nullptr);
+    // m_Material.texture = &m_Texture.value();
 }
 
 void Viewer::Update()
@@ -29,7 +30,7 @@ void Viewer::Update()
         m_Transform.Update(deltaTime);
 
         m_Editor.BeginFrame();
-        m_Editor.OnGUI(m_Camera, m_Lighting, m_Transform);
+        m_Editor.OnGUI(m_Camera, m_Lighting, m_Transform, m_Material);
 
         RenderScene();
 
@@ -52,10 +53,10 @@ void Viewer::RenderScene()
     m_Shader.SetUniform("u_View", view);
     m_Shader.SetUniform("u_Projection", projection);
 
-    m_Shader.SetUniform("u_lightDirection", m_Lighting.direction);
-    m_Shader.SetUniform("u_ambientStrength", m_Lighting.ambientStrength);
-    m_Shader.SetUniform("u_specularStrength", m_Lighting.specularStrength);
-    m_Shader.SetUniform("u_shininess", m_Lighting.shininess);
+    m_Shader.SetUniform("u_LightDirection", m_Lighting.direction);
+    m_Shader.SetUniform("u_AmbientStrength", m_Lighting.ambientStrength);
+    m_Shader.SetUniform("u_SpecularStrength", m_Lighting.specularStrength);
+    m_Shader.SetUniform("u_ShininessStrength", m_Lighting.shininessStrength);
 
     m_Shader.SetUniform("u_Material.baseColor", m_Material.baseColor);
     m_Shader.SetUniform("u_Material.ambient", m_Material.ambient);
@@ -70,11 +71,16 @@ void Viewer::RenderScene()
 
     if (hasTexture)
     {
-    glActiveTexture(GL_TEXTURE0);
-    m_Texture.Bind();
-    m_Shader.SetUniform("u_Texture", 0);
-    
+        glActiveTexture(GL_TEXTURE0);
+        m_Material.texture->Bind();
+        m_Shader.SetUniform("u_Texture", 0);
+    }
+
     m_Model.Draw();
+
     m_Shader.Unbind();
-    m_Texture.Unbind();
+    if (m_Material.texture)
+    {
+        m_Texture->Unbind();
+    }
 }

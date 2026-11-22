@@ -4,10 +4,14 @@
 
 #include "core/window.h"
 #include "ui/editor.h"
+
 #include "scene/camera.h"
-#include "rendering/shader.h"
 #include "scene/model.h"
+
+#include "rendering/shader.h"
 #include "rendering/texture.h"
+#include "rendering/material.h"
+#include <optional>
 
 class Viewer
 {
@@ -22,7 +26,8 @@ class Viewer
         Camera m_Camera;
         Model m_Model;
         Shader m_Shader;
-        Texture m_Texture;
+        std::optional<Texture> m_Texture;
+        Material m_Material;
         
         LightingSettings m_Lighting;
         Transform m_Transform;
