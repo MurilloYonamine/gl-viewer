@@ -1,6 +1,6 @@
 #pragma once
 
-#include "mesh.h"
+#include "rendering/mesh.h"
 #include <string_view>
 
 class Model

@@ -1,4 +1,4 @@
-#include "mesh.h"
+#include "rendering/mesh.h"
 
 Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices)
     : m_Vbo(vertices.data(), vertices.size() * sizeof(Vertex)),

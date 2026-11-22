@@ -1,10 +1,10 @@
 #pragma once
 
-#include "window.h"
-#include "editor.h"
-#include "camera.h"
-#include "shader.h"
-#include "model.h"
+#include "core/window.h"
+#include "ui/editor.h"
+#include "scene/camera.h"
+#include "rendering/shader.h"
+#include "scene/model.h"
 
 class Viewer
 {
@@ -12,7 +12,6 @@ class Viewer
         Viewer();
         ~Viewer() = default;
         void Update();
-
         
     private:
         Window m_Window;

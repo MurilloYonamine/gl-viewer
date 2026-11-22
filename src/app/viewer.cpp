@@ -1,7 +1,4 @@
-#include "viewer.h"
-#include "shader.h"
-#include "mesh.h"
-
+#include "app/viewer.h"
 #include <glm/glm.hpp>
 
 Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),

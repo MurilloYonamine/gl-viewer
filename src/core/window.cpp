@@ -2,8 +2,8 @@
 // Created by murillo.gyonamine on 08/08/2026.
 //
 
-#include "window.h"
-#include "gl_debug.h"
+#include "core/window.h"
+#include "rendering/gl_debug.h"
 #include <stdexcept>
 
 Window::Window(const int width, const int height, const std::string_view title)

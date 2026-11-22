@@ -1,7 +1,7 @@
 #pragma once
 #include "gl/glew.h"
-#include "vertex_buffer.h"
-#include "vertex_buffer_layout.h"
+#include "rendering/vertex_buffer.h"
+#include "rendering/vertex_buffer_layout.h"
 
 class VertexArray {
     public:

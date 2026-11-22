@@ -1,9 +1,9 @@
 #pragma once
 
-#include "camera.h"
-#include "window.h"
-#include "lighting_settings.h"
-#include "transform.h"
+#include "scene/camera.h"
+#include "core/window.h"
+#include "scene/lighting_settings.h"
+#include "scene/transform.h"
 
 class Editor
 {

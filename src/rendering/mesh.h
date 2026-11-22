@@ -2,10 +2,10 @@
 
 #include <vector>
 
-#include "vertex_array.h"
-#include "vertex_buffer.h"
-#include "index_buffer.h"
-#include "vertex.h"
+#include "rendering/vertex_array.h"
+#include "rendering/vertex_buffer.h"
+#include "rendering/index_buffer.h"
+#include "rendering/vertex.h"
 
 class Mesh
 {

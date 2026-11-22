@@ -1,4 +1,4 @@
-#include "vertex_buffer.h"
+#include "rendering/vertex_buffer.h"
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)
 {

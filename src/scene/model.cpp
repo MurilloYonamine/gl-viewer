@@ -1,11 +1,11 @@
-#include "model.h"
+#include "scene/model.h"
 
 #include <stdexcept>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "vertex.h"
+#include "rendering/vertex.h"
 
 Model::Model(std::string_view path)
 {

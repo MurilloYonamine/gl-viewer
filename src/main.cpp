@@ -1,6 +1,6 @@
 #include <iostream>
 #include <exception>
-#include "viewer.h"
+#include "app/viewer.h"
 
 int main()
 {

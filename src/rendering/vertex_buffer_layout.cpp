@@ -1,4 +1,4 @@
-#include "vertex_buffer_layout.h"
+#include "rendering/vertex_buffer_layout.h"
 #include <GL/glew.h>
 
 VertexBufferLayout::VertexBufferLayout(size_t stride) : m_Stride(stride)
