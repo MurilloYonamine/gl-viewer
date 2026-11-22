@@ -18,6 +18,9 @@ class Camera
         float GetYaw() const { return m_Yaw; }
         void SetYaw(float yaw);
 
+        float GetDistance() const { return m_Distance; }
+        void SetDistance(float distance);
+
         glm::vec3 GetPosition() { return m_Position; }
 
     private:

@@ -2,6 +2,7 @@
 
 #include "scene/camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include "camera.h"
 
 
 glm::mat4 Camera::GetView()
@@ -24,6 +25,12 @@ void Camera::SetFov(float fov)
 void Camera::SetYaw(float yaw)
 {
     m_Yaw = yaw;
+    UpdatePosition();
+}
+
+void Camera::SetDistance(float distance)
+{
+    m_Distance = glm::clamp(distance, 0.5f, 20.0f);
     UpdatePosition();
 }
 
