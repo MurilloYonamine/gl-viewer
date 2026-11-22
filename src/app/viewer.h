@@ -7,6 +7,7 @@
 #include "scene/camera.h"
 #include "rendering/shader.h"
 #include "scene/model.h"
+#include "rendering/texture.h"
 
 class Viewer
 {
@@ -21,6 +22,7 @@ class Viewer
         Camera m_Camera;
         Model m_Model;
         Shader m_Shader;
+        Texture m_Texture;
         
         LightingSettings m_Lighting;
         Transform m_Transform;

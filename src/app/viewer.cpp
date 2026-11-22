@@ -5,8 +5,11 @@
 
 Viewer::Viewer() : m_Window(800, 600, "GL Viewer"),
                    m_Editor(m_Window),
-                   m_Model("res/models/monkey.obj"),
-                   m_Shader("res/shaders/model.shader") {}
+                   m_Model("res/models/Duck.gltf"),
+                   m_Shader("res/shaders/model.shader"),
+                   m_Texture("res/textures/DuckCM.png")
+{
+}
 
 void Viewer::Update()
 {
@@ -54,6 +57,12 @@ void Viewer::RenderScene()
     m_Shader.SetUniform("u_specularStrength", m_Lighting.specularStrength);
 
     m_Shader.SetUniform("u_cameraPos", cameraPos);
+
+    glActiveTexture(GL_TEXTURE0);
+    m_Texture.Bind();
+    m_Shader.SetUniform("u_Texture", 0);
+    
     m_Model.Draw();
     m_Shader.Unbind();
+    m_Texture.Unbind();
 }
