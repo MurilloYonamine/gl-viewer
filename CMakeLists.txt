@@ -47,6 +47,13 @@ FetchContent_Declare(
     GIT_TAG v1.91.9b
 )
 
+# ImGui File Dialog
+FetchContent_Declare(
+    imgui_file_dialog
+    GIT_REPOSITORY https://github.com/aiekick/ImGuiFileDialog.git
+    GIT_TAG master
+)
+
 # stb_image
 FetchContent_Declare(
     stb
@@ -54,7 +61,7 @@ FetchContent_Declare(
     GIT_TAG master
 )
 
-FetchContent_MakeAvailable(glfw glew glm assimp imgui stb)
+FetchContent_MakeAvailable(glfw glew glm assimp imgui imgui_file_dialog stb)
 
 add_library(imgui STATIC
         ${imgui_SOURCE_DIR}/imgui.cpp
@@ -80,6 +87,8 @@ target_link_libraries(imgui PUBLIC
         glfw
         glew_s
 )
+
+target_link_libraries(ImGuiFileDialog PUBLIC imgui)
 
 # ============================== Assimp Optimization ==============================
 # Keep only OBJ, FBX and GLTF importers, disable everything else
@@ -121,6 +130,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         assimp
         glm::glm
         imgui
+        ImGuiFileDialog
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
