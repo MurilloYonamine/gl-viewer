@@ -4,10 +4,12 @@
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;
 layout(location = 2) in vec3 normal;
+layout(location = 3) in vec2 texCoords;
 
 out vec3 vertexColor;
 out vec3 vertexNormal;
 out vec3 fragPos;
+out vec2 fragTexCoord;
 
 uniform mat4 u_Model;
 uniform mat4 u_View;
@@ -19,6 +21,7 @@ void main()
     vertexColor = color;
     vertexNormal = mat3(transpose(inverse(u_Model))) * normal;
     fragPos = vec3(u_Model * vec4(position, 1.0));
+    fragTexCoord = texCoords;
 }
 
 #shader fragment
@@ -27,6 +30,7 @@ void main()
 in vec3 vertexColor;
 in vec3 vertexNormal;
 in vec3 fragPos;
+in vec2 fragTexCoord;
 
 uniform vec3 u_lightDirection;
 uniform float u_ambientStrength;
@@ -59,5 +63,5 @@ void main()
     float lightIntensity = ambient + diff + spec;
 
     vec3 result = lightIntensity * vertexColor;
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(fragTexCoord, 0.0, 1.0);
 }

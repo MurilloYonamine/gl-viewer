@@ -60,9 +60,19 @@ std::vector<Mesh> Model::LoadMeshes(std::string_view path)
                 vertex.color = {0.6f, 0.6f, 0.6f};
             }
 
+            if (mesh->HasTextureCoords(0))
+            {
+                const aiVector3D &texCoords = mesh->mTextureCoords[0][j];
+                vertex.texCoords = {texCoords.x, texCoords.y};
+            }
+            else
+            {
+                vertex.texCoords = {0.0f, 0.0f};
+            }
+
             const aiVector3D &normal = mesh->mNormals[j];
             vertex.normal = {normal.x, normal.y, normal.z};
-            
+
             modelVertices.push_back(vertex);
         }
 

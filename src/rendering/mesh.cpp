@@ -11,6 +11,7 @@ Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> 
     layout.PushFloat(3, offsetof(Vertex, position));
     layout.PushFloat(3, offsetof(Vertex, color));
     layout.PushFloat(3, offsetof(Vertex, normal));
+    layout.PushFloat(2, offsetof(Vertex, texCoords));
 
     m_Vao.AddBuffer(m_Vbo, layout);
     m_Vao.Unbind();
