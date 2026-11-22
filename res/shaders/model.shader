@@ -33,9 +33,12 @@ in vec3 fragPos;
 in vec2 fragTexCoord;
 
 uniform vec3 u_lightDirection;
-uniform float u_ambientStrength;
 uniform vec3 u_cameraPos;
+
+uniform float u_ambientStrength;
 uniform float u_specularStrength;
+uniform float u_shininess;
+
 uniform sampler2D u_texture;
 
 out vec4 FragColor;
@@ -53,7 +56,7 @@ void main()
 
     if (diff > 0.0)
     {
-        spec = u_specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), 32.0);
+        spec = u_specularStrength * pow(max(dot(viewDir, reflectDir), 0.0), u_shininess);
     }
     else
     {

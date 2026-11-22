@@ -55,6 +55,7 @@ void Viewer::RenderScene()
     m_Shader.SetUniform("u_lightDirection", m_Lighting.direction);
     m_Shader.SetUniform("u_ambientStrength", m_Lighting.ambientStrength);
     m_Shader.SetUniform("u_specularStrength", m_Lighting.specularStrength);
+    m_Shader.SetUniform("u_shininess", m_Lighting.shininess);
 
     m_Shader.SetUniform("u_cameraPos", cameraPos);
 
