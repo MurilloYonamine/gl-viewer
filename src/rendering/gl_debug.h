@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 09/08/2026.
+
 #pragma once
 
 #include <GL/glew.h>

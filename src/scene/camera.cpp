@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 14/11/2026.
+
 #include "scene/camera.h"
 #include <glm/gtc/matrix_transform.hpp>
 

@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 08/08/2026.
+
 #include <iostream>
 #include <exception>
 #include "app/viewer.h"

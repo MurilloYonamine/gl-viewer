@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 21/11/2026.
+
 #include "rendering/mesh.h"
 
 Mesh::Mesh(const std::vector<Vertex> &vertices, const std::vector<unsigned int> &indices)

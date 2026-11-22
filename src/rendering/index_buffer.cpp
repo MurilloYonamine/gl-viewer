@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 07/09/2026.
+
 #include "rendering/index_buffer.h"
 
 IndexBuffer::IndexBuffer(const unsigned int *data, unsigned int count) : m_Count(count)

@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 14/11/2026.
+
 #pragma once
 
 #include "scene/camera.h"

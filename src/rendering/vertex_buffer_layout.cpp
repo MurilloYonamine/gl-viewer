@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 07/09/2026.
+
 #include "rendering/vertex_buffer_layout.h"
 #include <GL/glew.h>
 

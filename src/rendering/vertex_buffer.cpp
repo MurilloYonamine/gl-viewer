@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 07/09/2026.
+
 #include "rendering/vertex_buffer.h"
 
 VertexBuffer::VertexBuffer(const void* data, unsigned int size)

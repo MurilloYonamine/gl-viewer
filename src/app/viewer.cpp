@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 07/09/2026.
+
 #include "app/viewer.h"
 #include <glm/glm.hpp>
 

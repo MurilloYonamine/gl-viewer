@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 14/11/2026.
+
 #include "ui/editor.h"
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>

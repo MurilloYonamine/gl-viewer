@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 21/11/2026.
+
 #pragma once
 
 #include "rendering/mesh.h"

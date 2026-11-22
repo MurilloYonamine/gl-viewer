@@ -1,6 +1,4 @@
-//
-// Created by murillo.gyonamine on 08/08/2026.
-//
+// Created by murillo.gyonamine on 09/08/2026.
 
 #include "core/window.h"
 #include "rendering/gl_debug.h"

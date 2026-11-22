@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 21/11/2026.
+
 #include "scene/model.h"
 
 #include <stdexcept>

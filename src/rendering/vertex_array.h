@@ -1,3 +1,5 @@
+// Created by murillo.gyonamine on 07/09/2026.
+
 #pragma once
 #include "gl/glew.h"
 #include "rendering/vertex_buffer.h"
