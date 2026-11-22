@@ -10,7 +10,6 @@
 #include <optional>
 #include <array>
 
-
 struct FileSelection
 {
     std::optional<std::string> model;
@@ -31,4 +30,12 @@ class Editor
         Window &m_Window;
         std::array<char, 512> m_ModelPath{};
         std::array<char, 512> m_TexturePath{};
+
+        void DrawModelSection();
+        void HandleFileDialogs(FileSelection &selection);
+
+        void DrawTransformSection(Transform &transform);
+        void DrawCameraSection(Camera &camera);
+        void DrawLightingSection(LightingSettings &lighting);
+        void DrawMaterialSection(Material &material);
 };
