@@ -30,3 +30,5 @@ A 3D model viewer built with C++ and OpenGL, developed as a learning project to 
 - GLM
 - Assimp
 - Dear ImGui
+- ImGuiFileDialog
+- stb_image
