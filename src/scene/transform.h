@@ -8,7 +8,7 @@ struct Transform
 {
     glm::vec3 position{0.0f};
     glm::vec3 rotation{0.0f};
-    glm::vec3 scale{1.0f};
+    glm::vec3 scale{0.01f};
 
     bool shouldAutoRotate = false;
     glm::mat4 autoRotation{1.0f};

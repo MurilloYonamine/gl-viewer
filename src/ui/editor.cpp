@@ -42,7 +42,7 @@ void Editor::OnGUI(Camera &camera, LightingSettings &lighting, Transform &transf
     {
         ImGui::SliderFloat3("Position", glm::value_ptr(transform.position), -10.0f, 10.0f);
         ImGui::SliderFloat3("Rotation", glm::value_ptr(transform.rotation), 0.0f, 360.0f, "%.0f");
-        ImGui::SliderFloat3("Scale", glm::value_ptr(transform.scale), 0.1f, 10.0f);
+        ImGui::SliderFloat3("Scale", glm::value_ptr(transform.scale), -10.0f, 10.0f);
         ImGui::Checkbox("Auto Rotate", &transform.shouldAutoRotate);
         if (transform.shouldAutoRotate)
         {
