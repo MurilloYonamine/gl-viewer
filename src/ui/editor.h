@@ -14,6 +14,7 @@ struct FileSelection
 {
     std::optional<std::string> model;
     std::optional<std::string> texture;
+    std::optional<std::string> specularMap;
 };
 
 class Editor
@@ -30,6 +31,7 @@ class Editor
         Window &m_Window;
         std::array<char, 512> m_ModelPath{};
         std::array<char, 512> m_TexturePath{};
+        std::array<char, 512> m_SpecularMapPath{};
 
         void DrawModelSection();
         void HandleFileDialogs(FileSelection &selection);

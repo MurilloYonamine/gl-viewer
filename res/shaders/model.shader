@@ -50,6 +50,9 @@ uniform float u_ShininessStrength;
 uniform sampler2D u_Texture;
 uniform bool u_HasTexture;
 
+uniform sampler2D u_SpecularMap;
+uniform bool u_HasSpecularMap;
+
 out vec4 fragColor;
 
 void main()
@@ -68,11 +71,17 @@ void main()
     {
         spec = u_SpecularStrength * pow(max(dot(viewDir, reflectDir), 0.0), u_Material.shininess);
     }
+    vec3 specularMask = vec3(1.0);
 
+    if (u_HasSpecularMap)
+    {
+        specularMask = texture(u_SpecularMap, fragTexCoord).rgb;
+    }
+    
     // Material components
     vec3 ambient = u_AmbientStrength * u_Material.ambient;
     vec3 diffuse = diff * u_Material.diffuse;
-    vec3 specular = spec * u_Material.specular;
+    vec3 specular = spec * u_Material.specular * specularMask;
     
     vec3 lightIntensity = ambient + diffuse + specular;
     vec4 textureColor = vec4(1.0);
@@ -81,8 +90,8 @@ void main()
     {
         textureColor = texture(u_Texture, fragTexCoord);
     }
-    vec3 surfaceColor = u_Material.baseColor * textureColor.rgb;
 
-    vec3 result = lightIntensity * surfaceColor;
+    vec3 surfaceColor = u_Material.baseColor * textureColor.rgb;
+    vec3 result = (ambient + diffuse) * surfaceColor + specular;
     fragColor = vec4(result, textureColor.a);
 }

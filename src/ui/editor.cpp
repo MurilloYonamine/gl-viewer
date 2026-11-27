@@ -68,7 +68,7 @@ void Editor::DrawModelSection()
     if (ImGui::Button("Open Model"))
     {
         IGFD::FileDialogConfig config;
-        config.path = ".";
+        config.path = "./res/models";
 
         ImGuiFileDialog::Instance()->OpenDialog("OpenModelDialog", "Select a 3D Model", ".obj,.fbx,.gltf,.glb", config);
     }
@@ -80,7 +80,7 @@ void Editor::DrawModelSection()
     if (ImGui::Button("Open Texture"))
     {
         IGFD::FileDialogConfig config;
-        config.path = ".";
+        config.path = "./res/models";
 
         ImGuiFileDialog::Instance()->OpenDialog("OpenTextureDialog", "Select a Texture", ".png,.jpg", config);
     }
@@ -88,6 +88,18 @@ void Editor::DrawModelSection()
     ImGui::SameLine();
     ImGui::SetNextItemWidth(-1.0f);
     ImGui::InputText("##TexturePath", m_TexturePath.data(), m_TexturePath.size(), ImGuiInputTextFlags_ReadOnly);
+
+    if (ImGui::Button("Open Specular Map"))
+    {
+        IGFD::FileDialogConfig config;
+        config.path = "./res/models";
+
+        ImGuiFileDialog::Instance()->OpenDialog("OpenSpecularMapDialog", "Select a Specular Texture", ".png,.jpg", config);
+    }
+
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(-1.0f);
+    ImGui::InputText("##SpecularMapPath", m_SpecularMapPath.data(), m_SpecularMapPath.size(), ImGuiInputTextFlags_ReadOnly);
 }
 
 void Editor::HandleFileDialogs(FileSelection &selection)
@@ -115,6 +127,19 @@ void Editor::HandleFileDialogs(FileSelection &selection)
 
             std::snprintf(m_TexturePath.data(), m_TexturePath.size(), "%s", selection.texture->c_str());
             std::cout << "Selected texture: " << *selection.texture << '\n';
+        }
+
+        dialog->Close();
+    }
+
+    if (dialog->Display("OpenSpecularMapDialog", ImGuiWindowFlags_NoCollapse, ImVec2(900, 550), ImVec2(1200, 700)))
+    {
+        if (dialog->IsOk())
+        {
+            selection.specularMap = dialog->GetFilePathName();
+
+            std::snprintf(m_SpecularMapPath.data(), m_SpecularMapPath.size(), "%s", selection.specularMap->c_str());
+            std::cout << "Selected Specular Map: " << *selection.specularMap << '\n';
         }
 
         dialog->Close();

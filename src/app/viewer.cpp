@@ -59,6 +59,21 @@ void Viewer::Update()
             }
         }
 
+        if (selection.specularMap)
+        {
+            m_Material.specularMap = nullptr;
+
+            try
+            {
+                m_SpecularTexture.emplace(*selection.specularMap);
+                m_Material.specularMap = &m_SpecularTexture.value();
+            }
+            catch (const std::exception &e)
+            {
+                std::cerr << "Failed to load specular texture: " << e.what() << '\n';
+            }
+        }
+
         RenderScene();
 
         m_Editor.EndFrame();
@@ -96,6 +111,16 @@ void Viewer::RenderScene()
     bool hasTexture = m_Material.texture != nullptr;
     m_Shader.SetUniform("u_HasTexture", static_cast<int>(hasTexture));
 
+    bool hasSpecularMap = static_cast<int>(m_Material.specularMap != nullptr);
+    m_Shader.SetUniform("u_HasSpecularMap", hasSpecularMap);
+
+    if (hasSpecularMap)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        m_Material.specularMap->Bind();
+        m_Shader.SetUniform("u_SpecularMap", 1);
+    }
+
     if (hasTexture)
     {
         glActiveTexture(GL_TEXTURE0);
@@ -111,6 +136,13 @@ void Viewer::RenderScene()
     m_Shader.Unbind();
     if (m_Material.texture)
     {
-        m_Texture->Unbind();
+        glActiveTexture(GL_TEXTURE0);
+        m_Material.texture->Bind();
+    }
+
+    if (m_Material.specularMap)
+    {
+        glActiveTexture(GL_TEXTURE1);
+        m_Material.specularMap->Bind();
     }
 }

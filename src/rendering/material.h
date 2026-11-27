@@ -13,4 +13,5 @@ struct Material
     float shininess = 32.0f;
 
     Texture *texture = nullptr;
+    Texture* specularMap = nullptr;
 };

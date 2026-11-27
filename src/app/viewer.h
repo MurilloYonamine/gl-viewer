@@ -24,10 +24,11 @@ class Viewer
         Window m_Window;
         Editor m_Editor;
         Camera m_Camera;
-        std::optional<Model> m_Model;
         Shader m_Shader;
-        std::optional<Texture> m_Texture;
         Material m_Material;
+        std::optional<Texture> m_Texture;
+        std::optional<Texture> m_SpecularTexture;
+        std::optional<Model> m_Model;
         
         LightingSettings m_Lighting;
         Transform m_Transform;
